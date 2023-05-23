@@ -20,19 +20,19 @@ public class Move : MonoBehaviour
     {
         if (Input.GetKey(KeyCode.W))
         {
-            transform.Translate(Vector3.forward * 0.1f);
+            transform.Translate(Vector3.forward * 2f * Time.deltaTime);
         }
         if (Input.GetKey(KeyCode.S))
         {
-            transform.Translate(Vector3.back * 0.1f);
+            transform.Translate(Vector3.back * 2f * Time.deltaTime);
         }
         if (Input.GetKey(KeyCode.A))
         {
-            transform.Translate(Vector3.left * 0.1f);
+            transform.Translate(Vector3.left * 2f * Time.deltaTime);
         }
         if (Input.GetKey(KeyCode.D))
         {
-            transform.Translate(Vector3.right * 0.1f);
+            transform.Translate(Vector3.right * 2f  * Time.deltaTime);
         }
     }
     void Jump()
