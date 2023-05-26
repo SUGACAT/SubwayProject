@@ -37,7 +37,7 @@ public class Move : MonoBehaviour
     }
     void Jump()
     {
-        if (Input.GetKey(KeyCode.Space))
+        if (Input.GetKeyDown(KeyCode.Space))
         {
             GetComponent<Rigidbody>().AddForce(Vector3.up * 200f);
         }
