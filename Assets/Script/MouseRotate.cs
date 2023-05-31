@@ -19,7 +19,7 @@ public class MouseRotate : MonoBehaviour
         AngleX = ClampAngle(AngleX, limitMinX, limitMaxX);
         transform.rotation = Quaternion.Euler(AngleX, AngleY, 0);
     }
-
+    
     private float ClampAngle(float angle, float min, float max)
     {
         if (angle < -360) angle += 360;
