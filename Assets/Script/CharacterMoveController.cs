@@ -20,15 +20,15 @@ public class CharacterMoveController : MonoBehaviour
         characterController.Move(moveForce * Time.deltaTime);
         if (Input.GetKey(KeyCode.LeftShift))
         {
-            moveSpeed = 4;
+            moveSpeed = 6;
         }
         else if (Input.GetKey(KeyCode.LeftControl))
         {
-            moveSpeed = 1;
+            moveSpeed = 2;
         }
         else
         {
-            moveSpeed = 2;
+            moveSpeed = 4;
         }
     }
     public void For_Forward(Vector3 direction)
