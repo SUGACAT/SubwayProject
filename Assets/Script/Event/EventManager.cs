@@ -2,12 +2,23 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+[System.Serializable]
+public class Event
+{
+    public string eventName;
+    public Animator _event;
+}
+
 public class EventManager : MonoBehaviour
 {
+    [Header("Events")]
+    public Event[] Event_List;
+    
+    [Header("Scripts")]
     public CanvasManager theCanvasManager;
     public PlayerManager thePlayerManager;
 
-    // Start is called before the first frame update
+        // Start is called before the first frame update
     void Start()
     {
         GameStartEvent();
@@ -29,5 +40,10 @@ public class EventManager : MonoBehaviour
     public void GameStartEventOver()
     {
         thePlayerManager.ControlMove(true);
+    }
+
+    public void AppearMonsterEvent()
+    {
+        Event_List[0]._event.SetTrigger("Event1");
     }
 }

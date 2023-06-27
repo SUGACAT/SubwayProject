@@ -23,29 +23,41 @@ public class Action
     }
 }
 
+public class GetFlashCommand : ICommand
+{
+    private FlashBox theFlashBox;
+    public GetFlashCommand(FlashBox theFlashBox)
+    {
+        this.theFlashBox = theFlashBox;
+    }
+
+    public void execute()
+    {
+        theFlashBox.GetFlash();
+    }
+}
 
 public class Interact : MonoBehaviour
 {
     [Header("Values")]
     public float interactDistance;
-
     public string obj_CodeName;
+    private ICommand commandValue;
 
     private RaycastHit hit = new RaycastHit();
     private Ray ray;
-
-    private ICommand commandValue;
-
+    
     [Header("Check")]
     public bool canInteract = false;
 
     [Header("Scripts")]
     public CanvasManager theCanvasManager;
+    private PlayerManager thePlayerManager;
 
     // Start is called before the first frame update
-    void Start()
+    void Awake()
     {
-        
+        thePlayerManager = GetComponent<PlayerManager>();
     }
 
     // Update is called once per frame
@@ -88,6 +100,19 @@ public class Interact : MonoBehaviour
     {
         Debug.Log("Interact Complete");
 
+        switch (obj_CodeName)
+        {
+            case "FlashContainer" :
+                Code_Flash();
+                break;
+        }
+    }
+
+    public void Code_Flash()
+    {
+        thePlayerManager.GetFlash();
+        thePlayerManager.PlayEvent(0);
+        
         commandValue = new GetFlashCommand(new FlashBox());
         Action action = new Action(commandValue);
 
