@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using DG.Tweening;
 
 public class PlayerController : MonoBehaviour
 {
@@ -9,6 +10,8 @@ public class PlayerController : MonoBehaviour
     private Move theMoveController;
 
     public bool canMove = true;
+
+    public bool canRotate = true;
 
     void Awake()
     {
@@ -21,7 +24,7 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (canMove == false) return;
+        if ((canMove && canRotate) == false) return;
 
         UpdateRotate();
         UpdateMove();
@@ -30,6 +33,11 @@ public class PlayerController : MonoBehaviour
     public void LookFront() 
     {
         M_Rotate.UpdateRotate(90f, 0f);
+    }
+
+    public void LerpRotation(Vector3 dir, float speed)
+    {
+        transform.DORotate(dir, speed, RotateMode.Fast);
     }
 
     private void UpdateRotate()

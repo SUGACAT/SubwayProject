@@ -21,7 +21,7 @@ public class EventManager : MonoBehaviour
         // Start is called before the first frame update
     void Start()
     {
-        GameStartEvent();
+        _Event0("Start");
     }
 
     // Update is called once per frame
@@ -30,20 +30,31 @@ public class EventManager : MonoBehaviour
         
     }
 
-    public void GameStartEvent()
+    public void _Event0(string type)
     {
-        theCanvasManager.FadeImageEvent();
-        thePlayerManager.ControlMove(false);
-        thePlayerManager.LookFront();
+        if (type == "Start")
+        {
+            theCanvasManager.FadeImageEvent();
+            thePlayerManager.ControlMove(false, false);
+            thePlayerManager.LookFront();
+        }
+        else
+        {
+            thePlayerManager.ControlMove(false, false);
+        }
     }
 
-    public void GameStartEventOver()
+    public void _Event1(string type)
     {
-        thePlayerManager.ControlMove(true);
-    }
-
-    public void AppearMonsterEvent()
-    {
-        Event_List[0]._event.SetTrigger("Event1");
+        if (type == "Start")
+        {
+            Event_List[0]._event.SetTrigger("Event1");
+            thePlayerManager.ControlMove(false, false);
+            thePlayerManager.LerpRotation(Vector3.zero, 1f);
+        }
+        else
+        {
+            thePlayerManager.ControlMove(false, false);
+        }
     }
 }

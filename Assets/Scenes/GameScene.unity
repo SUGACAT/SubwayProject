@@ -663,6 +663,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   codeName: FlashContainer
+  interacted: 0
 --- !u!1 &596977630
 GameObject:
   m_ObjectHideFlags: 0
@@ -1949,6 +1950,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1521372718}
   - component: {fileID: 1521372719}
+  - component: {fileID: 1521372720}
   m_Layer: 0
   m_Name: EventMonster
   m_TagString: Untagged
@@ -1994,6 +1996,19 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &1521372720
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1521372717}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 83af1816e60c7234d8153d56f9ffe730, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  theEventManager: {fileID: 614417451}
 --- !u!1001 &1631841590
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -5726,7 +5741,7 @@ Light:
   m_Shape: 0
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_Intensity: 0.2
-  m_Range: 4.2
+  m_Range: 4.6
   m_SpotAngle: 30
   m_InnerSpotAngle: 21.80208
   m_CookieSize: 10
@@ -6057,6 +6072,10 @@ PrefabInstance:
     - target: {fileID: 2609106615359469093, guid: eb5d286cb1ac2b14e8cb87a957ed2a4b, type: 3}
       propertyPath: m_Name
       value: Event_CatMonster
+      objectReference: {fileID: 0}
+    - target: {fileID: 2609106615359469094, guid: eb5d286cb1ac2b14e8cb87a957ed2a4b, type: 3}
+      propertyPath: debugMode
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2609106615359469094, guid: eb5d286cb1ac2b14e8cb87a957ed2a4b, type: 3}
       propertyPath: m_Enabled

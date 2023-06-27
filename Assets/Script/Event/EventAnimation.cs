@@ -2,11 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class InteractableObject : MonoBehaviour
+public class EventAnimation : MonoBehaviour
 {
-    public string codeName;
-
-    public bool interacted;
+    public EventManager theEventManager;
 
     // Start is called before the first frame update
     void Start()
@@ -18,5 +16,10 @@ public class InteractableObject : MonoBehaviour
     void Update()
     {
         
+    }
+
+    public void RotateActive()
+    {
+        theEventManager._Event1("");
     }
 }

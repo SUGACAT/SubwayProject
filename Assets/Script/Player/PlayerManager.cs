@@ -39,7 +39,7 @@ public class PlayerManager : MonoBehaviour
         switch (value)
         {
             case 0:
-                theEventManager.AppearMonsterEvent();
+                theEventManager._Event1("Start");
                 break;
             case 1:
                 break;
@@ -47,8 +47,10 @@ public class PlayerManager : MonoBehaviour
                 break;
         }
     }
-    
-    public void ControlMove(bool value) => thePlayerController.canMove = value;
+
+    public void ControlMove(bool move, bool rotate) { thePlayerController.canMove = move; thePlayerController.canRotate = rotate; }
 
     public void LookFront() => thePlayerController.LookFront();
+
+    public void LerpRotation(Vector3 dir, float speed) => thePlayerController.LerpRotation(dir, speed);
 }

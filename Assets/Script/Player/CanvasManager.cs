@@ -46,7 +46,7 @@ public class CanvasManager : MonoBehaviour
         yield return new WaitForSeconds(4.2f);
 
         Destroy(backgroundImage);
-        theEventManager.GameStartEventOver();
+        theEventManager._Event0("");
     }
 
     public void SetInteractObject(bool value)
@@ -58,7 +58,7 @@ public class CanvasManager : MonoBehaviour
     {
         if (Input.GetKey(KeyCode.E))
         {
-            if (theInteract)
+            if (theInteract.canInteract)
             {
                 interactValue += (Time.deltaTime / 2);
 

@@ -2,11 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class InteractableObject : MonoBehaviour
+public class MissionManager : MonoBehaviour
 {
-    public string codeName;
-
-    public bool interacted;
 
     // Start is called before the first frame update
     void Start()

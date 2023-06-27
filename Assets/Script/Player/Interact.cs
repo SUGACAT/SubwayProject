@@ -23,20 +23,6 @@ public class Action
     }
 }
 
-public class GetFlashCommand : ICommand
-{
-    private FlashBox theFlashBox;
-    public GetFlashCommand(FlashBox theFlashBox)
-    {
-        this.theFlashBox = theFlashBox;
-    }
-
-    public void execute()
-    {
-        theFlashBox.GetFlash();
-    }
-}
-
 public class Interact : MonoBehaviour
 {
     [Header("Values")]
@@ -46,6 +32,8 @@ public class Interact : MonoBehaviour
 
     private RaycastHit hit = new RaycastHit();
     private Ray ray;
+
+    private InteractableObject interactedObject;
     
     [Header("Check")]
     public bool canInteract = false;
@@ -72,11 +60,16 @@ public class Interact : MonoBehaviour
 
         Debug.DrawRay(ray.origin, ray.direction * interactDistance, Color.red);
 
-        if(Physics.Raycast(ray, out hit, interactDistance))
+        if (Physics.Raycast(ray, out hit, interactDistance))
         {
             if (hit.transform.CompareTag("Interactable"))
             {
-                obj_CodeName = hit.transform.gameObject.GetComponent<InteractableObject>().codeName;
+                var i_Component = hit.transform.gameObject.GetComponent<InteractableObject>();
+
+                if (i_Component.interacted) { return; }
+
+                obj_CodeName = i_Component.codeName;
+                interactedObject = i_Component;
 
                 theCanvasManager.SetInteractObject(true);
                 canInteract = true;
@@ -99,13 +92,18 @@ public class Interact : MonoBehaviour
     public void InteractSucceed()
     {
         Debug.Log("Interact Complete");
+        interactedObject.GetComponent<InteractableObject>().interacted = true;
 
         switch (obj_CodeName)
         {
-            case "FlashContainer" :
+            case "FlashContainer":
                 Code_Flash();
                 break;
         }
+
+        theCanvasManager.SetInteractObject(false);
+
+        canInteract = false;
     }
 
     public void Code_Flash()
