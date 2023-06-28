@@ -5,7 +5,6 @@ using UnityEngine;
 public class LightSway : MonoBehaviour
 {
     private Vector3 originPos;
-
     private Vector3 currentPos;
 
     [SerializeField]

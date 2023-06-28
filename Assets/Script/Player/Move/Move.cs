@@ -4,18 +4,30 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UIElements;
 
+public enum MoveState
+{
+    walking,
+    running,
+    crawling
+}
+
 public class Move : MonoBehaviour
 {
+    [Header("Values")]
     public float moveSpeed = 6;
     private Vector3 moveForce;
-    private CharacterController characterController;
 
+    public MoveState _moveState;
+
+    [Header("Scripts")]
+    private CharacterController characterController;
     private PlayerAnimationManager thePlayerAnimManager;
+    private PlayerController thePlayerController;
 
     private void Awake()
     {
         characterController = GetComponent<CharacterController>();
-
+        thePlayerController = GetComponent<PlayerController>();
         thePlayerAnimManager = GetComponent<PlayerAnimationManager>();
     }
 
@@ -25,14 +37,19 @@ public class Move : MonoBehaviour
         if (Input.GetKey(KeyCode.LeftShift))
         {
             moveSpeed = 4;
+            _moveState = MoveState.running;
+
+            thePlayerController.Stamina = Time.deltaTime;
         }
         else if (Input.GetKey(KeyCode.LeftControl))
         {
             moveSpeed = 1;
+            _moveState = MoveState.crawling;
         }
         else
         {
             moveSpeed = 2;
+            _moveState = MoveState.walking;
         }
     }
 

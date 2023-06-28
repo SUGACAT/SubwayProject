@@ -6,12 +6,18 @@ using DG.Tweening;
 
 public class PlayerController : MonoBehaviour
 {
+    [Header("Values")]
+    public bool canMove = true;
+    public bool canRotate = true;
+
+    public float currentStamina;
+    public float maxStamina;
+
+    [Header("Scripts")]
     private MouseRotate M_Rotate;
     private Move theMoveController;
 
-    public bool canMove = true;
-
-    public bool canRotate = true;
+    public float Stamina { get { return currentStamina; } set { currentStamina -= value; } }
 
     void Awake()
     {
@@ -19,6 +25,11 @@ public class PlayerController : MonoBehaviour
         Cursor.lockState = CursorLockMode.Locked;
         M_Rotate = GetComponent<MouseRotate>();
         theMoveController = GetComponent<Move>();
+    }
+
+    private void Start()
+    {
+        currentStamina = maxStamina;
     }
 
     // Update is called once per frame

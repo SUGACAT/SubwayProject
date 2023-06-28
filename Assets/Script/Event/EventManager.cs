@@ -55,6 +55,7 @@ public class EventManager : MonoBehaviour
         else if(type == "End")
         {
             thePlayerManager.ControlMove(true, true);
+            Event_List[0]._event.gameObject.SetActive(false);
         }
     }
 }
