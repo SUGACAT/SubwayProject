@@ -109,7 +109,7 @@ public class Interact : MonoBehaviour
     public void Code_Flash()
     {
         thePlayerManager.GetFlash();
-        thePlayerManager.PlayEvent(0);
+        thePlayerManager.PlayEvent(1);
         
         commandValue = new GetFlashCommand(new FlashBox());
         Action action = new Action(commandValue);

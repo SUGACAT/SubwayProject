@@ -20,6 +20,11 @@ public class EventAnimation : MonoBehaviour
 
     public void RotateActive()
     {
-        theEventManager._Event1("");
+        theEventManager._Event1("Rotate");
+    }
+
+    public void _Event1Over()
+    {
+        theEventManager._Event1("End"); 
     }
 }

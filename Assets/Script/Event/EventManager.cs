@@ -21,7 +21,7 @@ public class EventManager : MonoBehaviour
         // Start is called before the first frame update
     void Start()
     {
-        _Event0("Start");
+        thePlayerManager.PlayEvent(0);
     }
 
     // Update is called once per frame
@@ -35,13 +35,8 @@ public class EventManager : MonoBehaviour
         if (type == "Start")
         {
             theCanvasManager.FadeImageEvent();
-            thePlayerManager.ControlMove(false, false);
             thePlayerManager.LookFront();
-        }
-        else
-        {
-            thePlayerManager.ControlMove(false, false);
-        }
+        }   
     }
 
     public void _Event1(string type)
@@ -52,9 +47,14 @@ public class EventManager : MonoBehaviour
             thePlayerManager.ControlMove(false, false);
             thePlayerManager.LerpRotation(Vector3.zero, 1f);
         }
-        else
+        else if (type == "Rotate")
         {
-            thePlayerManager.ControlMove(false, false);
+            thePlayerManager.LookFront();
+            thePlayerManager.ControlMove(false, true);
+        }
+        else if(type == "End")
+        {
+            thePlayerManager.ControlMove(true, true);
         }
     }
 }
