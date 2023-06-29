@@ -3,22 +3,25 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using DG.Tweening;
+using UnityEngine.Serialization;
 
 public class CanvasManager : MonoBehaviour
 {
     [Header("Value")]
     public float interactValue = 0;
 
-    [Header("Prefabs")]
-    public Image backgroundImage;
-    public Image interact_img;
-
+    [FormerlySerializedAs("background_img")] [FormerlySerializedAs("backgroundImage")] [Header("Prefabs")]
+    public Image background_Img;
+    public Image interact_Img;
+    public Image staminaBar_Img;
+    
     [Header("Objects")]
     public GameObject interact_Obj;
 
     [Header("Scripts")]
     public EventManager theEventManager;
     public Interact theInteract;
+    public PlayerManager thePlayerManager;
 
     // Start is called before the first frame update
     void Start()
@@ -30,6 +33,7 @@ public class CanvasManager : MonoBehaviour
     void Update()
     {
         SetInteractValue();
+        SetStaminaBar();
     }
 
     public void FadeImageEvent()
@@ -41,14 +45,19 @@ public class CanvasManager : MonoBehaviour
     {
         yield return new WaitForSeconds(1f);
 
-        backgroundImage.DOColor(Color.white, 4);
+        background_Img.DOColor(Color.white, 4);
 
         yield return new WaitForSeconds(4.2f);
 
-        Destroy(backgroundImage);
+        Destroy(background_Img);
         theEventManager._Event0("");
     }
 
+    public void SetStaminaBar()
+    {
+        staminaBar_Img.fillAmount = thePlayerManager.ControlStamina() / 100;
+    }
+    
     public void SetInteractObject(bool value)
     {
         interact_Obj.SetActive(value);
@@ -62,7 +71,7 @@ public class CanvasManager : MonoBehaviour
             {
                 interactValue += (Time.deltaTime / 2);
 
-                interact_img.fillAmount = interactValue;
+                interact_Img.fillAmount = interactValue;
 
                 if(interactValue >= 1)
                 {
@@ -76,6 +85,6 @@ public class CanvasManager : MonoBehaviour
     public void ResetInteractValue()
     {
         interactValue = 0;
-        interact_img.fillAmount = interactValue;
+        interact_Img.fillAmount = interactValue;
     }
 }

@@ -49,11 +49,8 @@ public class PlayerManager : MonoBehaviour
         }
     }
 
+    public float ControlStamina() => thePlayerController.ControlStamina();
     public void ControlMove(bool move, bool rotate) { thePlayerController.canMove = move; thePlayerController.canRotate = rotate; }
-
     public void LookFront() => thePlayerController.LookFront();
-
-   // public void LookZero() => thePlayerController.LookZero();
-
     public void LerpRotation(Vector3 dir, float speed) => thePlayerController.LerpRotation(dir, speed);
 }

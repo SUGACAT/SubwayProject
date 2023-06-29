@@ -39,12 +39,13 @@ public class Move : MonoBehaviour
             moveSpeed = 4;
             _moveState = MoveState.running;
 
-            thePlayerController.Stamina = Time.deltaTime;
+            thePlayerController.DecreaseStamina = Time.deltaTime * 8;
         }
         else if (Input.GetKey(KeyCode.LeftControl))
         {
             moveSpeed = 1;
             _moveState = MoveState.crawling;
+            thePlayerController.IncreaseStamina = Time.deltaTime;
         }
         else
         {
@@ -61,6 +62,7 @@ public class Move : MonoBehaviour
         if(direction == Vector3.zero)
         {
             thePlayerAnimManager.Idle();
+            thePlayerController.IncreaseStamina = Time.deltaTime * 4;
         }
         else
             thePlayerAnimManager.Walk();

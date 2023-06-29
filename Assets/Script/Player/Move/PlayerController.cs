@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using DG.Tweening;
 
 public class PlayerController : MonoBehaviour
@@ -17,7 +18,8 @@ public class PlayerController : MonoBehaviour
     private MouseRotate M_Rotate;
     private Move theMoveController;
 
-    public float Stamina { get { return currentStamina; } set { currentStamina -= value; } }
+    public float DecreaseStamina { get { return currentStamina; } set { currentStamina -= value; } }
+    public float IncreaseStamina { get { return currentStamina; } set { currentStamina += value; } }
 
     void Awake()
     {
@@ -42,6 +44,13 @@ public class PlayerController : MonoBehaviour
         UpdateMove();
     }
 
+    public float ControlStamina()
+    {
+        currentStamina = currentStamina >= maxStamina ? maxStamina : currentStamina;
+
+        return currentStamina;
+    }
+    
     public void LookFront() 
     {
         M_Rotate.UpdateRotate(90f, 0f);

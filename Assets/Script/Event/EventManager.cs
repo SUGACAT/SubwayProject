@@ -18,7 +18,7 @@ public class EventManager : MonoBehaviour
     public CanvasManager theCanvasManager;
     public PlayerManager thePlayerManager;
 
-        // Start is called before the first frame update
+    // Start is called before the first frame update
     void Start()
     {
         thePlayerManager.PlayEvent(0);
