@@ -33,7 +33,7 @@ public class Interact : MonoBehaviour
     private RaycastHit hit = new RaycastHit();
     private Ray ray;
 
-    private InteractableObject interactedObject;
+    public InteractableObject interactedObject;
     
     [Header("Check")]
     public bool canInteract = false;
@@ -97,23 +97,33 @@ public class Interact : MonoBehaviour
         switch (obj_CodeName)
         {
             case "FlashContainer":
-                Code_Flash();
+                Command_Flash();
+                break;
+            case "SandBox" :
+                Command_Sand();
                 break;
         }
-
+        Action action = new Action(commandValue);
+        action.operate();
+        
         theCanvasManager.SetInteractObject(false);
 
         canInteract = false;
     }
 
-    public void Code_Flash()
+    public void Command_Flash()
     {
         thePlayerManager.GetFlash();
         thePlayerManager.PlayEvent(1);
         
         commandValue = new GetFlashCommand(new FlashBox());
-        Action action = new Action(commandValue);
+    }
 
-        action.operate();
+    public void Command_Sand()
+    {
+        thePlayerManager.SetPlayerPosition(interactedObject.transform.position);
+        theCanvasManager.SetHideImage(true);
+        
+        commandValue = new GetSandBoxCommand(new SandBox());
     }
 }

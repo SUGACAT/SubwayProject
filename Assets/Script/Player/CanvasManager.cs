@@ -10,10 +10,11 @@ public class CanvasManager : MonoBehaviour
     [Header("Value")]
     public float interactValue = 0;
 
-    [FormerlySerializedAs("background_img")] [FormerlySerializedAs("backgroundImage")] [Header("Prefabs")]
+    [Header("Prefabs")]
     public Image background_Img;
     public Image interact_Img;
     public Image staminaBar_Img;
+    public GameObject hideSight_Obj;
     
     [Header("Objects")]
     public GameObject interact_Obj;
@@ -50,7 +51,6 @@ public class CanvasManager : MonoBehaviour
         yield return new WaitForSeconds(4.2f);
 
         Destroy(background_Img);
-        theEventManager._Event0("");
     }
 
     public void SetStaminaBar()
@@ -82,6 +82,11 @@ public class CanvasManager : MonoBehaviour
         }
     }
 
+    public void SetHideImage(bool value)
+    {
+        hideSight_Obj.SetActive(value);
+    }
+    
     public void ResetInteractValue()
     {
         interactValue = 0;

@@ -5,7 +5,10 @@ using UnityEngine;
 [System.Serializable]
 public class Event
 {
+    [Header("Name")]
     public string eventName;
+    [Header("Time")]
+    public float[] duration;
     public Animator _event;
 }
 
@@ -17,6 +20,7 @@ public class EventManager : MonoBehaviour
     [Header("Scripts")]
     public CanvasManager theCanvasManager;
     public PlayerManager thePlayerManager;
+    public MonsterSpawner theMonsterSpawner;
 
     // Start is called before the first frame update
     void Start()
@@ -39,23 +43,24 @@ public class EventManager : MonoBehaviour
         }   
     }
 
-    public void _Event1(string type)
+    public void _Event1()
     {
-        if (type == "Start")
-        {
-            Event_List[0]._event.SetTrigger("Event1");
-            thePlayerManager.ControlMove(false, false);
-            thePlayerManager.LerpRotation(Vector3.zero, 1f);
-        }
-        else if (type == "Rotate")
-        {
-            thePlayerManager.LookFront();
-            thePlayerManager.ControlMove(false, true);
-        }
-        else if(type == "End")
-        {
-            thePlayerManager.ControlMove(true, true);
-            Event_List[0]._event.gameObject.SetActive(false);
-        }
+        StartCoroutine("Event1Coroutine");
+    }
+    
+    IEnumerator Event1Coroutine()
+    {
+        thePlayerManager.ControlMove(false, false);
+        thePlayerManager.LerpRotation(Vector3.zero, 1f);
+
+        yield return new WaitForSeconds(Event_List[0].duration[0]);
+
+        thePlayerManager.LookFront();
+        thePlayerManager.ControlMove(false, true);
+        
+        yield return new WaitForSeconds(Event_List[0].duration[1]);
+
+        thePlayerManager.ControlMove(true, true);
+        Event_List[0]._event.gameObject.SetActive(false);
     }
 }

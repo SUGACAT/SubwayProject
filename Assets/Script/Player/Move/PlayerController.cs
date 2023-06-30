@@ -18,8 +18,8 @@ public class PlayerController : MonoBehaviour
     private MouseRotate M_Rotate;
     private Move theMoveController;
 
-    public float DecreaseStamina { get { return currentStamina; } set { currentStamina -= value; } }
-    public float IncreaseStamina { get { return currentStamina; } set { currentStamina += value; } }
+    public float DecreaseStamina { get => currentStamina; set => currentStamina -= value; }
+    public float IncreaseStamina { get => currentStamina; set => currentStamina += value; }
 
     void Awake()
     {
@@ -65,9 +65,7 @@ public class PlayerController : MonoBehaviour
     {
         float mouseX = Input.GetAxis("Mouse X");
         float mouseY = Input.GetAxis("Mouse Y");
-        M_Rotate.UpdateRotate(mouseX, mouseY);  
-        
-        Debug.Log("1");
+        M_Rotate.UpdateRotate(mouseX, mouseY);
     }
 
     private void UpdateMove()
@@ -75,7 +73,5 @@ public class PlayerController : MonoBehaviour
         float dir_x = Input.GetAxisRaw("Horizontal");
         float dir_z = Input.GetAxisRaw("Vertical");
         theMoveController.For_Forward(new Vector3(dir_x, 0, dir_z));
-        
-        Debug.Log("2");
     }
 }

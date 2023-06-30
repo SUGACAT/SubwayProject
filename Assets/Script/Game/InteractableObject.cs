@@ -8,15 +8,8 @@ public class InteractableObject : MonoBehaviour
 
     public bool interacted;
 
-    // Start is called before the first frame update
-    void Start()
+    public void DeactiveChildObjects()
     {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
+        gameObject[] childObjects = 
     }
 }
