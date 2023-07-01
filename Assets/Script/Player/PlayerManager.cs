@@ -6,12 +6,15 @@ public class PlayerManager : MonoBehaviour
 {
     [Header("Scripts")]
     private PlayerController thePlayerController;
-    public EventManager theEventManager;
     private CharacterController theCharacterController;
-    
+    public EventManager theEventManager;
+    public CanvasManager theCanvasManager;
+
     [Header("Prefabs")]
     public GameObject flash_Obj, defaultLight;
-    
+
+    public bool isHiding;
+
     private void Awake()
     {
         thePlayerController = GetComponent<PlayerController>();
@@ -39,13 +42,21 @@ public class PlayerManager : MonoBehaviour
         }
     }
 
+    public void Hide(Vector3 pos, ref bool type)
+    {
+        isHiding = true;
+        theCanvasManager.SetHideImage(true);
+        theCanvasManager.SetInteractObject(true);
+
+        SetPlayerPosition(pos);
+        type = true;
+    }
+
     public void SetPlayerPosition(Vector3 pos)
     {
-        print(pos);
         theCharacterController.enabled = false;
         this.transform.position = pos;
         theCharacterController.enabled = true;
-        print(transform.position);
     }
     
     public float ControlStamina() => thePlayerController.ControlStamina();

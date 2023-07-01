@@ -81,7 +81,7 @@ public class Interact : MonoBehaviour
                 canInteract = false;
             }
         }
-        else
+        else if(!thePlayerManager.isHiding)
         {
             theCanvasManager.SetInteractObject(false);
             theCanvasManager.ResetInteractValue();
@@ -91,6 +91,8 @@ public class Interact : MonoBehaviour
 
     public void InteractSucceed()
     {
+        canInteract = false;
+
         Debug.Log("Interact Complete");
         interactedObject.GetComponent<InteractableObject>().interacted = true;
 
@@ -105,10 +107,6 @@ public class Interact : MonoBehaviour
         }
         Action action = new Action(commandValue);
         action.operate();
-        
-        theCanvasManager.SetInteractObject(false);
-
-        canInteract = false;
     }
 
     public void Command_Flash()
@@ -121,9 +119,11 @@ public class Interact : MonoBehaviour
 
     public void Command_Sand()
     {
-        thePlayerManager.SetPlayerPosition(interactedObject.transform.position);
-        theCanvasManager.SetHideImage(true);
-        
+        canInteract = true;
+
+        interactedObject.SetChildObjects(false);
+        thePlayerManager.Hide(interactedObject.transform.position, ref canInteract);
+
         commandValue = new GetSandBoxCommand(new SandBox());
     }
 }
