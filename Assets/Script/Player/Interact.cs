@@ -73,15 +73,12 @@ public class Interact : MonoBehaviour
 
                 theCanvasManager.SetInteractObject(true);
                 canInteract = true;
-
-                Debug.Log("1");
             }
             else
             {
                 theCanvasManager.SetInteractObject(false);
                 theCanvasManager.ResetInteractValue();
                 canInteract = false;
-                Debug.Log("2");
             }
         }
         else
@@ -91,7 +88,6 @@ public class Interact : MonoBehaviour
                 theCanvasManager.SetInteractObject(false);
                 theCanvasManager.ResetInteractValue();
                 canInteract = false;
-                Debug.Log("3");
             }
         }
     }
@@ -101,7 +97,6 @@ public class Interact : MonoBehaviour
         canInteract = false;
 
         Debug.Log("Interact Complete");
-        interactedObject.GetComponent<InteractableObject>().interacted = true;
 
         switch (obj_CodeName)
         {
@@ -122,6 +117,7 @@ public class Interact : MonoBehaviour
         thePlayerManager.PlayEvent(1);
         
         commandValue = new GetFlashCommand(new FlashBox());
+        interactedObject.interacted = true;
     }
 
     public void Command_Sand()
@@ -132,11 +128,13 @@ public class Interact : MonoBehaviour
             thePlayerManager.Hide("In", interactedObject.transform.position, ref canInteract);
 
             commandValue = new GetSandBoxCommand(new SandBox());
+            interactedObject.interacted = true;
         }
         else
         {
             interactedObject.SetChildObjects(true);
             thePlayerManager.Hide("Out", interactedObject.OutPos().transform.position, ref canInteract);
+            interactedObject.interacted = false;
         }
     }
 }

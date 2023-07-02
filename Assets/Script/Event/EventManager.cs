@@ -13,7 +13,6 @@ public class Event
     [Header("values")]
     public float moveDuration;
     public Transform startPos;
-    public Transform targetPos;
 
 }
 
@@ -61,7 +60,7 @@ public class EventManager : MonoBehaviour
         thePlayerManager.ControlMove(false, true);
 
         e_CatMonster.transform.position = Event_List[0].startPos.position;
-        e_CatMonster.transform.DOMove(Event_List[0].targetPos.position, Event_List[0].moveDuration);
+        e_CatMonster.SetActive(true);
 
         yield return new WaitForSeconds(Event_List[0].progressDuration[1]);
 

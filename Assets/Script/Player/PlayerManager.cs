@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using DG.Tweening;
 
 public class PlayerManager : MonoBehaviour
 {
@@ -75,6 +76,12 @@ public class PlayerManager : MonoBehaviour
         theCharacterController.enabled = true;
     }
     
+    public void Death(Vector3 targetPos)
+    {
+        transform.DORotate(targetPos, 1);
+        theCanvasManager.SetDeathImage(true);
+    }
+
     public float ControlStamina() => thePlayerController.ControlStamina();
     public void ControlMove(bool move, bool rotate) { thePlayerController.canMove = move; thePlayerController.canRotate = rotate; }
     public void LookFront() => thePlayerController.LookFront();

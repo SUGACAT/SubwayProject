@@ -15,6 +15,7 @@ public class CanvasManager : MonoBehaviour
     public Image interact_Img;
     public Image staminaBar_Img;
     public GameObject hideSight_Obj;
+    public GameObject death_Obj;
     
     [Header("Objects")]
     public GameObject interact_Obj;
@@ -91,6 +92,11 @@ public class CanvasManager : MonoBehaviour
         hideSight_Obj.SetActive(value);
     }
     
+    public void SetDeathImage(bool value)
+    {
+        death_Obj.SetActive(value);
+    }
+
     public void ResetInteractValue()
     {
         interactValue = 0;
