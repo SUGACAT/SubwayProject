@@ -4,15 +4,26 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    public static GameManager gameManager;
+
+    private MonsterSpawner theMonsterSpawner;
+    private EventManager theEventManager;
+
+    private void Awake()
     {
-        
+        gameManager = this;
+
+        AssignScript();
     }
 
-    // Update is called once per frame
-    void Update()
+    private void AssignScript()
     {
-        
+        theMonsterSpawner = GetComponentInChildren<MonsterSpawner>();
+        theEventManager = GetComponentInChildren<EventManager>();
+    }
+
+    public void StartMonsterSpawn()
+    {
+        theMonsterSpawner.SpawnMonster();
     }
 }

@@ -1,22 +1,30 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using DG.Tweening;
 
 [System.Serializable]
 public class Event
 {
-    [Header("Name")]
+    [Header("Progress")]
     public string eventName;
-    [Header("Time")]
-    public float[] duration;
-    public Animator _event;
+    public float[] progressDuration;
+
+    [Header("values")]
+    public float moveDuration;
+    public Transform startPos;
+    public Transform targetPos;
+
 }
 
 public class EventManager : MonoBehaviour
 {
     [Header("Events")]
     public Event[] Event_List;
-    
+
+    [Header("Prefabs")]
+    public GameObject e_CatMonster, e_RatMonster;
+
     [Header("Scripts")]
     public CanvasManager theCanvasManager;
     public PlayerManager thePlayerManager;
@@ -26,12 +34,6 @@ public class EventManager : MonoBehaviour
     void Start()
     {
         thePlayerManager.PlayEvent(0);
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
     }
 
     public void _Event0(string type)
@@ -53,14 +55,16 @@ public class EventManager : MonoBehaviour
         thePlayerManager.ControlMove(false, false);
         thePlayerManager.LerpRotation(Vector3.zero, 1f);
 
-        yield return new WaitForSeconds(Event_List[0].duration[0]);
+        yield return new WaitForSeconds(Event_List[0].progressDuration[0]);
 
         thePlayerManager.LookFront();
         thePlayerManager.ControlMove(false, true);
-        
-        yield return new WaitForSeconds(Event_List[0].duration[1]);
+
+        e_CatMonster.transform.position = Event_List[0].startPos.position;
+        e_CatMonster.transform.DOMove(Event_List[0].targetPos.position, Event_List[0].moveDuration);
+
+        yield return new WaitForSeconds(Event_List[0].progressDuration[1]);
 
         thePlayerManager.ControlMove(true, true);
-        Event_List[0]._event.gameObject.SetActive(false);
     }
 }

@@ -2,9 +2,13 @@ using UnityEngine;
 
 public class InteractableObject : MonoBehaviour
 {
+    [Header("Values")]
     public string codeName;
     public bool interacted;
 
+    public Transform outPosition;
+
+    [Header("Child")]
     public Transform[] allChildren;
 
     public void Start()
@@ -23,5 +27,10 @@ public class InteractableObject : MonoBehaviour
 
             allChildren[i].gameObject.SetActive(type);
         }
+    }
+
+    public Transform OutPos()
+    {
+        return outPosition;
     }
 }

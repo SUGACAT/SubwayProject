@@ -80,6 +80,10 @@ public class CanvasManager : MonoBehaviour
                 }
             }
         }
+        else
+        {
+            ResetInteractValue();
+        }
     }
 
     public void SetHideImage(bool value)

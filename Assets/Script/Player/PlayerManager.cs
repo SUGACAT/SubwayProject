@@ -42,14 +42,30 @@ public class PlayerManager : MonoBehaviour
         }
     }
 
-    public void Hide(Vector3 pos, ref bool type)
+    public void Hide(string type, Vector3 pos, ref bool value)
     {
-        isHiding = true;
-        theCanvasManager.SetHideImage(true);
-        theCanvasManager.SetInteractObject(true);
+        if (type == "In")
+        {
+            isHiding = true;
+            theCanvasManager.SetHideImage(true);
+            theCanvasManager.SetInteractObject(true);
+
+            ControlMove(false, false);
+
+            value = true;
+        }
+        else
+        {
+            isHiding = false;
+            theCanvasManager.SetHideImage(false);
+            theCanvasManager.SetInteractObject(false);
+
+            ControlMove(true, true);
+
+            value = false;
+        }
 
         SetPlayerPosition(pos);
-        type = true;
     }
 
     public void SetPlayerPosition(Vector3 pos)

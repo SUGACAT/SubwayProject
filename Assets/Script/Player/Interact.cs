@@ -66,26 +66,33 @@ public class Interact : MonoBehaviour
             {
                 var i_Component = hit.transform.gameObject.GetComponent<InteractableObject>();
 
-                if (i_Component.interacted) { return; }
+                if (i_Component.interacted && obj_CodeName != "SandBox") { return; }
 
                 obj_CodeName = i_Component.codeName;
                 interactedObject = i_Component;
 
                 theCanvasManager.SetInteractObject(true);
                 canInteract = true;
+
+                Debug.Log("1");
             }
             else
             {
                 theCanvasManager.SetInteractObject(false);
                 theCanvasManager.ResetInteractValue();
                 canInteract = false;
+                Debug.Log("2");
             }
         }
-        else if(!thePlayerManager.isHiding)
+        else
         {
-            theCanvasManager.SetInteractObject(false);
-            theCanvasManager.ResetInteractValue();
-            canInteract = false;
+            if (!thePlayerManager.isHiding)
+            {
+                theCanvasManager.SetInteractObject(false);
+                theCanvasManager.ResetInteractValue();
+                canInteract = false;
+                Debug.Log("3");
+            }
         }
     }
 
@@ -119,11 +126,17 @@ public class Interact : MonoBehaviour
 
     public void Command_Sand()
     {
-        canInteract = true;
+        if (!thePlayerManager.isHiding)
+        {
+            interactedObject.SetChildObjects(false);
+            thePlayerManager.Hide("In", interactedObject.transform.position, ref canInteract);
 
-        interactedObject.SetChildObjects(false);
-        thePlayerManager.Hide(interactedObject.transform.position, ref canInteract);
-
-        commandValue = new GetSandBoxCommand(new SandBox());
+            commandValue = new GetSandBoxCommand(new SandBox());
+        }
+        else
+        {
+            interactedObject.SetChildObjects(true);
+            thePlayerManager.Hide("Out", interactedObject.OutPos().transform.position, ref canInteract);
+        }
     }
 }

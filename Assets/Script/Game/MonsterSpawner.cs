@@ -23,11 +23,9 @@ public class MonsterSpawner : MonoBehaviour
 
     public void SpawnMonster()
     {
-        Instantiate(catMonster_Obj, catSpawnPos[0].position, Quaternion.identity);
-        Instantiate(catMonster_Obj, catSpawnPos[1].position, Quaternion.identity);
-
         for (int i = 0; i < ratSpawnPos.Length; i++)
         {
+            if(i < 2) Instantiate(catMonster_Obj, catSpawnPos[i].position, Quaternion.identity);
             Instantiate(ratMonster_Obj, ratSpawnPos[i].position, Quaternion.identity);
         }
     }
