@@ -17,7 +17,7 @@ public class PlayerController : MonoBehaviour
     [Header("Scripts")]
     private MouseRotate M_Rotate;
     private Move theMoveController;
-
+    private PlayerManager thePlayerManager;
     public float DecreaseStamina { get => currentStamina; set => currentStamina -= value; }
     public float IncreaseStamina { get => currentStamina; set => currentStamina += value; }
 
@@ -27,6 +27,7 @@ public class PlayerController : MonoBehaviour
         Cursor.lockState = CursorLockMode.Locked;
         M_Rotate = GetComponent<MouseRotate>();
         theMoveController = GetComponent<Move>();
+        thePlayerManager = GetComponent<PlayerManager>();
     }
 
     private void Start()
@@ -73,5 +74,18 @@ public class PlayerController : MonoBehaviour
         float dir_x = Input.GetAxisRaw("Horizontal");
         float dir_z = Input.GetAxisRaw("Vertical");
         theMoveController.For_Forward(new Vector3(dir_x, 0, dir_z));
+    }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        Debug.Log("one");
+
+        if (collision.transform.CompareTag("Monster"))
+        {
+            Debug.Log("YOUDIE");
+            thePlayerManager.Death(collision.transform.position);
+        }
+        else
+            Debug.Log(collision);
     }
 }

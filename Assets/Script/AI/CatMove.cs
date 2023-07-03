@@ -23,6 +23,8 @@ public class CatMove : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        target = FindObjectOfType<PlayerManager>().gameObject;
+
         _agent = GetComponent<NavMeshAgent>();
 
         anim = GetComponentInChildren<Animator>();
@@ -31,7 +33,7 @@ public class CatMove : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        _agent.SetDestination(target.transform.position);   
+        _agent.SetDestination(target.transform.position);
         
         if((transform.position - target.transform.position).magnitude >= 7f)
         {

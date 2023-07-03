@@ -21,7 +21,12 @@ public class PlayerManager : MonoBehaviour
         thePlayerController = GetComponent<PlayerController>();
         theCharacterController = GetComponent<CharacterController>();
     }
-    
+
+    private void Start()
+    {
+        LookFront();
+    }
+
     public void GetFlash()
     {
         flash_Obj.SetActive(true);
@@ -78,6 +83,8 @@ public class PlayerManager : MonoBehaviour
     
     public void Death(Vector3 targetPos)
     {
+        Debug.Log("You Died");
+
         transform.DORotate(targetPos, 1);
         theCanvasManager.SetDeathImage(true);
     }

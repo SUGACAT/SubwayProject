@@ -65,5 +65,15 @@ public class EventManager : MonoBehaviour
         yield return new WaitForSeconds(Event_List[0].progressDuration[1]);
 
         thePlayerManager.ControlMove(true, true);
+
+        yield return new WaitUntil(() =>  thePlayerManager.isHiding);
+
+        Debug.Log("NICE");
+
+        yield return new WaitForSeconds(Event_List[0].progressDuration[2]);
+
+        e_CatMonster.SetActive(false);
+        Debug.Log("Monster Is Gone");
+        GameManager.instance.StartMonsterSpawn();
     }
 }

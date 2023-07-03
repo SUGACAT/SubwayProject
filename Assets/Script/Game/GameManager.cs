@@ -4,14 +4,14 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
-    public static GameManager gameManager;
+    public static GameManager instance;
 
     private MonsterSpawner theMonsterSpawner;
     private EventManager theEventManager;
 
     private void Awake()
     {
-        gameManager = this;
+        instance = this;
 
         AssignScript();
     }

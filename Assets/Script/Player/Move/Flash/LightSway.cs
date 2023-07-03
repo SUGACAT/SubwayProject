@@ -4,54 +4,29 @@ using UnityEngine;
 
 public class LightSway : MonoBehaviour
 {
-    private Vector3 originPos;
-    private Vector3 currentPos;
+    private GameObject M_Camera;
 
-    [SerializeField]
-    private Vector3 limitPos;
-
-    [SerializeField]
-    private Vector3 smoothSway;
+    [Header("FlashRotate")]
+    private Vector3 offSet;
+    public float speed = 3.0f;
 
     // Start is called before the first frame update
     void Start()
     {
-        originPos = this.transform.localPosition;
+        M_Camera = Camera.main.gameObject;
+
+        offSet = transform.position - M_Camera.transform.position;
     }
 
     // Update is called once per frame
     void Update()
     {
-        TrySway();
+        Rotate();
     }
 
-    private void TrySway()
+    private void Rotate()
     {
-        if (Input.GetAxisRaw("Mouse X") != 0 || Input.GetAxisRaw("Mouse Y") != 0)
-        {
-            Swaying();
-        }
-        else
-        {
-            BackToOriginPos();
-        }
-    }
-
-    private void Swaying()
-    {
-        float _MoveX = Input.GetAxisRaw("Mouse X");
-        float _MoveY = Input.GetAxisRaw("Mouse Y");
-
-        currentPos.Set(Mathf.Clamp(Mathf.Lerp(currentPos.x, -_MoveX, smoothSway.x), -limitPos.x, limitPos.x),
-                       Mathf.Clamp(Mathf.Lerp(currentPos.y, -_MoveY, smoothSway.y), -limitPos.y, limitPos.y),
-                       originPos.z);
-
-        transform.localPosition = currentPos;
-    }
-
-    private void BackToOriginPos() 
-    {
-        currentPos = Vector3.Lerp(currentPos, originPos, smoothSway.x);
-        transform.localPosition = currentPos;
+        transform.position = M_Camera.transform.position + offSet;
+        transform.rotation = Quaternion.Slerp(transform.rotation, M_Camera.transform.rotation, speed * Time.deltaTime);
     }
 }
