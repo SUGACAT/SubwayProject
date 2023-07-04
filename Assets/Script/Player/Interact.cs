@@ -76,9 +76,12 @@ public class Interact : MonoBehaviour
             }
             else
             {
-                theCanvasManager.SetInteractObject(false);
-                theCanvasManager.ResetInteractValue();
-                canInteract = false;
+                if (!thePlayerManager.isHiding)
+                {
+                    theCanvasManager.SetInteractObject(false);
+                    theCanvasManager.ResetInteractValue();
+                    canInteract = false;
+                }
             }
         }
         else

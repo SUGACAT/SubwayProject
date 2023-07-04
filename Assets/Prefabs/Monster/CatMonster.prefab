@@ -596,9 +596,11 @@ GameObject:
   - component: {fileID: 485253503359107113}
   - component: {fileID: 4596040938379588737}
   - component: {fileID: 2926695218281218681}
+  - component: {fileID: 4081745391185026199}
+  - component: {fileID: 7623978090025318445}
   m_Layer: 0
   m_Name: CatMonster
-  m_TagString: Untagged
+  m_TagString: Monster
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -629,7 +631,7 @@ NavMeshAgent:
   m_Enabled: 1
   m_AgentTypeID: 0
   m_Radius: 0.5
-  m_Speed: 2.5
+  m_Speed: 1.4
   m_Acceleration: 8
   avoidancePriority: 50
   m_AngularSpeed: 120
@@ -658,12 +660,43 @@ MonoBehaviour:
   viewRadius: 9.09
   TargetMask:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 64
   obstacleMask:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 256
   hitTargetList: []
   target: {fileID: 0}
+  beforeRoamNumber: 0
+--- !u!54 &4081745391185026199
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3625700117708442370}
+  serializedVersion: 2
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_UseGravity: 0
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 112
+  m_CollisionDetection: 0
+--- !u!136 &7623978090025318445
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3625700117708442370}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  m_Radius: 0.5
+  m_Height: 2.4912703
+  m_Direction: 1
+  m_Center: {x: 0, y: 1.2490586, z: 0}
 --- !u!1 &3838715980529896749
 GameObject:
   m_ObjectHideFlags: 0

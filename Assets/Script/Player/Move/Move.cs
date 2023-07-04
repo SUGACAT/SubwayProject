@@ -39,18 +39,19 @@ public class Move : MonoBehaviour
             moveSpeed = 4;
             _moveState = MoveState.running;
 
-            thePlayerController.DecreaseStamina = Time.deltaTime * 8;
+            thePlayerController.DecreaseStamina = Time.deltaTime * 10;
         }
         else if (Input.GetKey(KeyCode.LeftControl))
         {
             moveSpeed = 1;
             _moveState = MoveState.crawling;
-            thePlayerController.IncreaseStamina = Time.deltaTime;
+            thePlayerController.IncreaseStamina = Time.deltaTime * 5;
         }
         else
         {
             moveSpeed = 2;
             _moveState = MoveState.walking;
+            thePlayerController.IncreaseStamina = Time.deltaTime * 4;
         }
     }
 
@@ -62,7 +63,7 @@ public class Move : MonoBehaviour
         if(direction == Vector3.zero)
         {
             thePlayerAnimManager.Idle();
-            thePlayerController.IncreaseStamina = Time.deltaTime * 4;
+            thePlayerController.IncreaseStamina = Time.deltaTime * 5;
         }
         else
             thePlayerAnimManager.Walk();

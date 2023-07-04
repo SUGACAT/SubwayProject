@@ -1,14 +1,16 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 public class MonsterSpawner : MonoBehaviour
 {
     public GameObject catMonster_Obj, ratMonster_Obj;
 
     public Transform[] catSpawnPos;
-    public Transform[] ratSpawnPos;
-    
+    public Transform[] ratSpawnPos_B1f;
+    public Transform[] ratSpawnPos_B2f;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -21,17 +23,24 @@ public class MonsterSpawner : MonoBehaviour
         
     }
 
-    public void SpawnMonster()
+    public void SpawnMonster(int floor)
     {
-        for (int i = 0; i < ratSpawnPos.Length; i++)
+        switch (floor)
         {
-            if(i < 2) Instantiate(catMonster_Obj, catSpawnPos[i].position, Quaternion.identity);
-            Instantiate(ratMonster_Obj, ratSpawnPos[i].position, Quaternion.identity);
+            case 1:
+                for (int i = 0; i < ratSpawnPos_B1f.Length; i++)
+                {
+                    Instantiate(ratMonster_Obj, ratSpawnPos_B1f[i].position, Quaternion.identity);
+                }
+                break;
+            case 2:
+                for (int i = 0; i < ratSpawnPos_B2f.Length; i++)
+                {
+                    Instantiate(ratMonster_Obj, ratSpawnPos_B2f[i].position, Quaternion.identity);
+                }
+                break;
         }
-    }
 
-    public void SpawnMonsterByPosition(Transform[] positions)
-    {
-        
+        Instantiate(catMonster_Obj, catSpawnPos[floor].position, Quaternion.identity);
     }
 }

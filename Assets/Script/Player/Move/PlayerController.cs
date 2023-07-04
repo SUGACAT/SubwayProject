@@ -76,7 +76,7 @@ public class PlayerController : MonoBehaviour
         theMoveController.For_Forward(new Vector3(dir_x, 0, dir_z));
     }
 
-    private void OnCollisionEnter(Collision collision)
+    /*private void OnCollisionEnter(Collision collision)
     {
         Debug.Log("one");
 
@@ -87,5 +87,5 @@ public class PlayerController : MonoBehaviour
         }
         else
             Debug.Log(collision);
-    }
+    } */
 }
