@@ -29,8 +29,8 @@ public class RatMove : MonoBehaviour
        _agent.SetDestination(target);
     }
     
-    void Roaming()
-    {
-        target = Random.insideUnitSphere(maxDistance);
-    }
+    //void Roaming()
+    //{
+    //    target = Random.insideUnitSphere(maxDistance);
+    //}
 }
