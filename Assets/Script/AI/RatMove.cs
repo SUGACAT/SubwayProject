@@ -7,12 +7,15 @@ using Random = UnityEngine.Random;
 
 public class RatMove : MonoBehaviour
 {
-    
-    
-    private NavMeshAgent _agent;
+    [Header("Values")]
+    [SerializeField] GameObject target;
 
-    private Vector3 target;
-    private float maxDistance;
+    [Header("Prefabs")]
+    [SerializeField] GameObject targetObj;
+
+    public float maxDistance;
+
+    private NavMeshAgent _agent;
 
     private void Awake()
     {
@@ -21,16 +24,19 @@ public class RatMove : MonoBehaviour
 
     void Start()
     {
+        target = Instantiate(targetObj, transform.position, Quaternion.identity);
 
+        Roaming();
     }
 
     void Update()
     {
-       _agent.SetDestination(target);
+       _agent.SetDestination(target.transform.position);
     }
     
-    //void Roaming()
-    //{
-    //    target = Random.insideUnitSphere(maxDistance);
-    //}
+    void Roaming()
+    {
+        target.transform.position = Random.insideUnitSphere * maxDistance;
+        target.transform.position = new Vector3(target.transform.position.x ,2.738f, target.transform.position.z);
+    }
 }
