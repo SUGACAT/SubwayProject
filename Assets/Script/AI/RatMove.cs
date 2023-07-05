@@ -1,26 +1,36 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
+using Random = UnityEngine.Random;
 
 public class RatMove : MonoBehaviour
 {
-    private NavMeshAgent _agent;
     
-    // Start is called before the first frame update
+    
+    private NavMeshAgent _agent;
+
+    private Vector3 target;
+    private float maxDistance;
+
+    private void Awake()
+    {
+        _agent = GetComponent<NavMeshAgent>();
+    }
+
     void Start()
     {
-        
+
     }
 
-    // Update is called once per frame
     void Update()
     {
-        
+       _agent.SetDestination(target);
     }
-
-    void MoveToRandomPos()
+    
+    void Roaming()
     {
-        
+        target = Random.insideUnitSphere(maxDistance);
     }
 }
