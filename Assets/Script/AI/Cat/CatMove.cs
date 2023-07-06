@@ -67,25 +67,25 @@ public class CatMove : MonoBehaviour
         Debug.DrawRay(myPos, rightDir * viewRadius, Color.blue);
         Debug.DrawRay(myPos, leftDir * viewRadius, Color.blue);
         Debug.DrawRay(myPos, lookDir * viewRadius, Color.cyan);
-        
+
         hitTargetList.Clear();
         Collider[] Targets = Physics.OverlapSphere(myPos, viewRadius, TargetMask);
 
         if (Targets.Length == 0) return;
 
-            foreach(Collider EnemyColli in Targets)
+        foreach (Collider EnemyColli in Targets)
         {
             Vector3 targetPos = EnemyColli.transform.position;
             Vector3 targetDir = (targetPos - myPos).normalized;
             float targetAngle = Mathf.Acos(Vector3.Dot(lookDir, targetDir)) * Mathf.Rad2Deg;
-            if(targetAngle <= viewAngle * 0.5f && !Physics.Raycast(myPos, targetDir, viewRadius, obstacleMask))
+            if (targetAngle <= viewAngle * 0.5f && !Physics.Raycast(myPos, targetDir, viewRadius, obstacleMask))
             {
                 hitTargetList.Add(EnemyColli);
                 if (debugMode) Debug.DrawLine(myPos, targetPos, Color.red);
             }
         }
     }
-    
+
     Vector3 AngleToDir(float angle)
     {
         float radian = angle * Mathf.Deg2Rad;
@@ -101,8 +101,6 @@ public class CatMove : MonoBehaviour
 
         beforeRoamNumber = roamNumber;
         target = GameManager.instance.theCatManager.B2_roamingPos[roamNumber];
-        
-        Debug.Log("AA");
     }
 
     

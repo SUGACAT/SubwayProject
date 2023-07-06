@@ -41,6 +41,6 @@ public class MonsterSpawner : MonoBehaviour
                 break;
         }
 
-        Instantiate(catMonster_Obj, catSpawnPos[floor].position, Quaternion.identity);
+        Instantiate(catMonster_Obj, catSpawnPos[floor - 1].position, Quaternion.identity);
     }
 }
