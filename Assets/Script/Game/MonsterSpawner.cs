@@ -5,7 +5,8 @@ using UnityEngine.Serialization;
 
 public class MonsterSpawner : MonoBehaviour
 {
-    public GameObject catMonster_Obj, ratMonster_Obj;
+    public GameObject[] catMonster_Obj;
+    public GameObject ratMonster_Obj;
 
     public Transform[] catSpawnPos;
     public Transform[] ratSpawnPos_B1f;
@@ -41,6 +42,6 @@ public class MonsterSpawner : MonoBehaviour
                 break;
         }
 
-        Instantiate(catMonster_Obj, catSpawnPos[floor - 1].position, Quaternion.identity);
+        Instantiate(catMonster_Obj[floor - 1], catSpawnPos[floor - 1].position, Quaternion.identity);
     }
 }

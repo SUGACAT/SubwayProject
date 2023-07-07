@@ -3,6 +3,13 @@ using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
 
+public enum Events
+{
+    DeathEvent,
+    FlashLightEvent,
+    LobbyAppearEvent,
+}
+
 [System.Serializable]
 public class Event
 {
@@ -12,8 +19,7 @@ public class Event
     
     [Header("values")]
     public float moveDuration;
-    public Transform startPos;
-
+    public Transform[] startPos;
 }
 
 public class EventManager : MonoBehaviour
@@ -33,34 +39,38 @@ public class EventManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        thePlayerManager.PlayEvent(0);
+        AwakeEvent("Start");
     }
 
-    public void _Event0(string type)
+    public void AwakeEvent(string type)
     {
         if (type == "Start")
         {
             theCanvasManager.FadeImageEvent();
             thePlayerManager.LookFront();
+            
+            thePlayerManager.SetRotate(true);
         }   
     }
 
-    public void _Event1()
+    public void FirstAppearEvent()
     {
-        StartCoroutine("Event1Coroutine");
+        StartCoroutine("FlashEventCoroutine");
     }
     
-    IEnumerator Event1Coroutine()
+    IEnumerator FlashEventCoroutine()
     {
+        int number = GameManager.instance.eventNumber;
+        
         thePlayerManager.ControlMove(false, false);
         thePlayerManager.LerpRotation(Vector3.zero, 1f);
 
         yield return new WaitForSeconds(Event_List[0].progressDuration[0]);
-
+        
         thePlayerManager.LookFront();
         thePlayerManager.ControlMove(false, true);
 
-        e_CatMonster.transform.position = Event_List[0].startPos.position;
+        e_CatMonster.transform.position = Event_List[0].startPos[0].position;
         e_CatMonster.SetActive(true);
 
         yield return new WaitForSeconds(Event_List[0].progressDuration[1]);
@@ -75,20 +85,31 @@ public class EventManager : MonoBehaviour
 
         e_CatMonster.SetActive(false);
         Debug.Log("Monster Is Gone");
-        GameManager.instance.StartMonsterSpawn();
+        GameManager.instance.StartMonsterSpawn(1);
     }
 
+    /*public void LobbyAppearEvent()
+    {
+        e_CatMonster.transform.position = Event_List[2].startPos[0].position;
+        e_CatMonster.SetActive(true);
+        
+        Debug.Log("LobbyAppear");
+    }*/
+    
     public void DeathEvent(bool type)
     {
         thePlayerManager.gameObject.SetActive(!type);
+        thePlayerManager.LookFront();
         if (type)
         {
             deathObject.SetActive(true);
+            thePlayerManager.gameObject.transform.position = GameManager.instance.SpawnPos();
             StartCoroutine(DeathCoroutine());
         }
         else
         {
             deathObject.SetActive(false);
+            thePlayerManager.SetRotate(false);
         }
     }
 
