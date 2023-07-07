@@ -658,7 +658,7 @@ GameObject:
   - component: {fileID: 4081745391185026199}
   - component: {fileID: 7623978090025318445}
   m_Layer: 0
-  m_Name: CatMonster
+  m_Name: B2_CatMonster
   m_TagString: Monster
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

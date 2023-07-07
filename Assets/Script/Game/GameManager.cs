@@ -1,12 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 [System.Serializable]
 public class SpawnPoint
 {
     public string name;
-    public int missionNumber;
     public Vector3 point;
 }
 
@@ -16,6 +16,8 @@ public class GameManager : MonoBehaviour
 
     [Header("Values")]
     public SpawnPoint[] spawnList;
+
+    public int eventNumber = 0;
     
     [Header("Scripts")]
     private MonsterSpawner theMonsterSpawner;
@@ -36,8 +38,13 @@ public class GameManager : MonoBehaviour
         theCatManager = GetComponentInChildren<CatManager>();
     }
 
-    public void StartMonsterSpawn()
+    public void StartMonsterSpawn(int floor)
     {
-        theMonsterSpawner.SpawnMonster(1);
+        theMonsterSpawner.SpawnMonster(floor);
+    }
+
+    public Vector3 SpawnPos()
+    {
+        return spawnList[eventNumber].point;
     }
 }

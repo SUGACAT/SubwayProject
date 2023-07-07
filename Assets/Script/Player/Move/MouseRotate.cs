@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -9,14 +10,24 @@ public class MouseRotate : MonoBehaviour
     [SerializeField] private float rotatecamYspeed = 1;
     private float limitMinX = -80;
     private float limitMaxX = 50;
-    private float AngleX;
-    private float AngleY;
+    public float AngleX;
+    public float AngleY;
+
+    public PlayerManager ThePlayerManager;
     
+    private void Awake()
+    {
+        //thePlayerManager.GetComponent<PlayerManager>();
+    }
+
     public void UpdateRotate(float mouseX, float mouseY)
     {
+        if (ThePlayerManager.isWaiting) return;
+        
         AngleY += mouseX * rotatecamYspeed;
         AngleX -= mouseY * rotatecamXspeed;
         AngleX = ClampAngle(AngleX, limitMinX, limitMaxX);
+        
         transform.rotation = Quaternion.Euler(AngleX, AngleY, 0);
     }
     

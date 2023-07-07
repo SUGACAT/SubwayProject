@@ -9,22 +9,29 @@ using Random = UnityEngine.Random;
 
 public class CatMove : MonoBehaviour
 {
-    [Header("Sight")]
-    [SerializeField] bool debugMode = false;
-    [FormerlySerializedAs("ViewAngle")] [Range(0f, 360f)] [SerializeField] float viewAngle = 0f;
-    [FormerlySerializedAs("ViewRadius")] [SerializeField] float viewRadius = 1f;
+    [Header("Sight")] [SerializeField] bool debugMode = false;
+
+    [FormerlySerializedAs("ViewAngle")] [Range(0f, 360f)] [SerializeField]
+    float viewAngle = 0f;
+
+    [FormerlySerializedAs("ViewRadius")] [SerializeField]
+    float viewRadius = 1f;
+
     [SerializeField] LayerMask TargetMask;
     [SerializeField] LayerMask obstacleMask;
 
     public List<Collider> hitTargetList = new List<Collider>();
-    
-    [Header("AI")]
-    private NavMeshAgent _agent;
+
+    [Header("Value")] [SerializeField] private bool B1cat;
+    [SerializeField] private bool B2cat;
+
+    [Header("AI")] private NavMeshAgent _agent;
     public Transform target;
 
     public int beforeRoamNumber;
-    
+
     private Animator anim;
+
     // Start is called before the first frame update
     void Start()
     {
