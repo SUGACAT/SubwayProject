@@ -24,6 +24,9 @@ public class Move : MonoBehaviour
     private PlayerAnimationManager thePlayerAnimManager;
     private PlayerController thePlayerController;
 
+    [SerializeField]
+    private float gravity;
+
     private void Awake()
     {
         characterController = GetComponent<CharacterController>();
@@ -33,6 +36,11 @@ public class Move : MonoBehaviour
 
     void Update()
     {
+        if (!characterController.isGrounded)
+        {
+            moveForce.y += gravity * Time.deltaTime;
+        }
+
         characterController.Move(moveForce * Time.deltaTime);
         if (Input.GetKey(KeyCode.LeftShift))
         {

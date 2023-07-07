@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -25,6 +26,11 @@ public class PlayerManager : MonoBehaviour
     private void Start()
     {
         LookFront();
+    }
+
+    private void Update()
+    {
+        
     }
 
     public void GetFlash()
@@ -83,10 +89,8 @@ public class PlayerManager : MonoBehaviour
     
     public void Death(Vector3 targetPos)
     {
+        theEventManager.DeathEvent(true);
         Debug.Log("You Died");
-
-        transform.DORotate(targetPos, 1);
-        theCanvasManager.SetDeathImage(true);
     }
 
     public float ControlStamina() => thePlayerController.ControlStamina();

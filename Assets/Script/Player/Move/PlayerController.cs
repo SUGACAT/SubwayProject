@@ -75,17 +75,4 @@ public class PlayerController : MonoBehaviour
         float dir_z = Input.GetAxisRaw("Vertical");
         theMoveController.For_Forward(new Vector3(dir_x, 0, dir_z));
     }
-
-    /*private void OnCollisionEnter(Collision collision)
-    {
-        Debug.Log("one");
-
-        if (collision.transform.CompareTag("Monster"))
-        {
-            Debug.Log("YOUDIE");
-            thePlayerManager.Death(collision.transform.position);
-        }
-        else
-            Debug.Log(collision);
-    } */
 }

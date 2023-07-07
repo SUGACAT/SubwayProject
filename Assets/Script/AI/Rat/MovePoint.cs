@@ -1,12 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.AI;
 
-public class RatMove : MonoBehaviour
+public class MovePoint : MonoBehaviour
 {
-    private NavMeshAgent _agent;
-    
     // Start is called before the first frame update
     void Start()
     {
@@ -15,11 +12,6 @@ public class RatMove : MonoBehaviour
 
     // Update is called once per frame
     void Update()
-    {
-        
-    }
-
-    void MoveToRandomPos()
     {
         
     }

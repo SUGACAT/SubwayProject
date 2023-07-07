@@ -9,7 +9,7 @@ public class Event
     [Header("Progress")]
     public string eventName;
     public float[] progressDuration;
-
+    
     [Header("values")]
     public float moveDuration;
     public Transform startPos;
@@ -23,7 +23,8 @@ public class EventManager : MonoBehaviour
 
     [Header("Prefabs")]
     public GameObject e_CatMonster, e_RatMonster;
-
+    public GameObject deathObject;
+    
     [Header("Scripts")]
     public CanvasManager theCanvasManager;
     public PlayerManager thePlayerManager;
@@ -75,5 +76,26 @@ public class EventManager : MonoBehaviour
         e_CatMonster.SetActive(false);
         Debug.Log("Monster Is Gone");
         GameManager.instance.StartMonsterSpawn();
+    }
+
+    public void DeathEvent(bool type)
+    {
+        thePlayerManager.gameObject.SetActive(!type);
+        if (type)
+        {
+            deathObject.SetActive(true);
+            StartCoroutine(DeathCoroutine());
+        }
+        else
+        {
+            deathObject.SetActive(false);
+        }
+    }
+
+    IEnumerator DeathCoroutine()
+    {
+        yield return new WaitForSeconds(Event_List[1].progressDuration[0]);
+        
+        DeathEvent(false);
     }
 }
