@@ -15,6 +15,8 @@ public class PlayerController : MonoBehaviour
     public float maxStamina;
 
     [Header("Scripts")]
+    private Animator anim;
+
     private MouseRotate M_Rotate;
     private Move theMoveController;
     private PlayerManager thePlayerManager;
@@ -28,6 +30,7 @@ public class PlayerController : MonoBehaviour
         M_Rotate = GetComponent<MouseRotate>();
         theMoveController = GetComponent<Move>();
         thePlayerManager = GetComponent<PlayerManager>();
+        anim = GetComponent<Animator>();
     }
 
     private void Start()
@@ -45,11 +48,33 @@ public class PlayerController : MonoBehaviour
         UpdateMove();
     }
 
+    public void IncreaseMoveSpeed()
+    {
+        StartCoroutine("SpeedCoolTimeCoroutine");
+    }
+
+    IEnumerator SpeedCoolTimeCoroutine()
+    {
+        Debug.Log("Speed Increase Start");
+
+        theMoveController.defaultSpeed += 4;
+
+        yield return new WaitForSeconds(10f);
+
+        theMoveController.defaultSpeed -= 4;
+        Debug.Log("Speed Increase End");
+    }
+
     public float ControlStamina()
     {
         currentStamina = currentStamina >= maxStamina ? maxStamina : currentStamina;
 
         return currentStamina;
+    }
+
+    public void AddStamina()
+    {
+        currentStamina += maxStamina / 2;
     }
     
     public void LookFront() 

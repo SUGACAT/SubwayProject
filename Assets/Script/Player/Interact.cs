@@ -40,6 +40,7 @@ public class Interact : MonoBehaviour
 
     [Header("Scripts")]
     public CanvasManager theCanvasManager;
+    public Inventory theInventory;
     private PlayerManager thePlayerManager;
 
     // Start is called before the first frame update
@@ -109,18 +110,19 @@ public class Interact : MonoBehaviour
             case "SandBox" :
                 Command_Sand();
                 break;
+            case "Drink":
+                Command_Drink();
+                break;
+            case "Chocobar":
+                Command_Chocobar();
+                break;
+            case "Battery":
+                Command_Battery();
+                break;
+
         }
         Action action = new Action(commandValue);
         action.operate();
-    }
-
-    public void Command_Flash()
-    {
-        thePlayerManager.GetFlash();
-        thePlayerManager.theEventManager.FirstAppearEvent();
-        
-        commandValue = new GetFlashCommand(new FlashBox());
-        interactedObject.interacted = true;
     }
 
     public void Command_Sand()
@@ -139,5 +141,38 @@ public class Interact : MonoBehaviour
             thePlayerManager.Hide("Out", interactedObject.OutPos().transform.position, ref canInteract);
             interactedObject.interacted = false;
         }
+    }
+
+    public void Command_Flash()
+    {
+        thePlayerManager.GetFlash();
+        thePlayerManager.theEventManager.FirstAppearEvent();
+
+        commandValue = new GetFlashCommand(new FlashBox());
+        interactedObject.interacted = true;
+    }
+
+    public void Command_Drink()
+    {
+        commandValue = new GetDrinkCommand(new Drink());
+        Destroy(interactedObject.gameObject);
+
+        theInventory.AddItemInInventory(Item.drink);
+    }
+
+    public void Command_Chocobar()
+    {                                   
+        commandValue = new GetChocobarCommand(new Chocobar());
+        Destroy(interactedObject.gameObject);
+
+        theInventory.AddItemInInventory(Item.chocobar);
+    }
+
+    public void Command_Battery()
+    {
+        commandValue = new GetBatteryCommand(new Battery());
+        Destroy(interactedObject.gameObject);
+
+        theInventory.AddItemInInventory(Item.battery);
     }
 }

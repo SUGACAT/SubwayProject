@@ -33,9 +33,9 @@ public class PlayerAnimationManager : MonoBehaviour
         anim.SetInteger("MoveState", 1);
     }
 
-    public void Run()
+    public void Crouch()
     {
-
+        anim.SetInteger("MoveState", 2);
     }
 
     public void StartAnim()

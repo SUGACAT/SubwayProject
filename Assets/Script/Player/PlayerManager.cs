@@ -13,18 +13,22 @@ public class PlayerManager : MonoBehaviour
     public EventManager theEventManager;
     public CanvasManager theCanvasManager;
     private MouseRotate theMouseRotate;
-    
+    private FlashLightManager theFlashLightManager;
+
     [Header("Prefabs")]
     public GameObject flash_Obj, defaultLight;
 
     public bool isHiding;
     public bool isWaiting = false;
-    
+
+    public int currentHeart;
+
     private void Awake()
     {
         thePlayerController = GetComponent<PlayerController>();
         theCharacterController = GetComponent<CharacterController>();
         theMouseRotate = GetComponent<MouseRotate>();
+        theFlashLightManager = GetComponentInChildren<FlashLightManager>();
     }
 
     private void Start()
@@ -91,7 +95,10 @@ public class PlayerManager : MonoBehaviour
         SetRotate(true);
     }
 
+    public void AddBattery() => theFlashLightManager.AddBattery();
+    public void IncreaseSpeed() => thePlayerController.IncreaseMoveSpeed();
     public float ControlStamina() => thePlayerController.ControlStamina();
+    public void AddStamina() => thePlayerController.AddStamina();
     public void ControlMove(bool move, bool rotate) { thePlayerController.canMove = move; thePlayerController.canRotate = rotate; }
     public void LookFront() => transform.rotation = Quaternion.Euler(0, 90, 0);
     public void LerpRotation(Vector3 dir, float speed) => thePlayerController.LerpRotation(dir, speed);

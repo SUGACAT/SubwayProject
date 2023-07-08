@@ -14,10 +14,14 @@ public enum MoveState
 public class Move : MonoBehaviour
 {
     [Header("Values")]
+    public float defaultSpeed;
     public float moveSpeed = 6;
     private Vector3 moveForce;
 
     public MoveState _moveState;
+
+    [SerializeField] bool isCrouching = false;
+    [SerializeField] bool isRunning;
 
     [Header("Scripts")]
     private CharacterController characterController;
@@ -41,39 +45,75 @@ public class Move : MonoBehaviour
             moveForce.y += gravity * Time.deltaTime;
         }
 
-        characterController.Move(moveForce * Time.deltaTime);
-        if (Input.GetKey(KeyCode.LeftShift))
+        switch (_moveState)
         {
-            moveSpeed = 4;
-            _moveState = MoveState.running;
-
-            thePlayerController.DecreaseStamina = Time.deltaTime * 10;
+            case MoveState.walking:
+                thePlayerController.IncreaseStamina = Time.deltaTime * 4;
+                break;
+            case MoveState.running:
+                thePlayerController.DecreaseStamina = Time.deltaTime * 10;
+                break;
+            case MoveState.crawling:
+                thePlayerController.IncreaseStamina = Time.deltaTime * 5;
+                break;
         }
-        else if (Input.GetKey(KeyCode.LeftControl))
+
+        characterController.Move(moveForce * Time.deltaTime);
+
+        if (Input.GetKeyDown(KeyCode.LeftControl))
         {
             moveSpeed = 1;
             _moveState = MoveState.crawling;
-            thePlayerController.IncreaseStamina = Time.deltaTime * 5;
+            thePlayerAnimManager.Crouch();
+
+            isCrouching = true;
+
+            Debug.Log("1");
         }
-        else
+        else if(Input.GetKeyUp(KeyCode.LeftControl)) 
         {
             moveSpeed = 2;
             _moveState = MoveState.walking;
-            thePlayerController.IncreaseStamina = Time.deltaTime * 4;
+            thePlayerAnimManager.Walk();
+
+            isCrouching = false;
+
+            Debug.Log("2");
+        }
+
+        if (isCrouching) return;
+
+        ////--------------------//
+
+        if (Input.GetKeyDown(KeyCode.LeftShift))
+        {
+            moveSpeed = 4;
+            _moveState = MoveState.running;
+            Debug.Log("3");
+            isRunning = true;
+        }
+        else if(Input.GetKeyUp(KeyCode.LeftShift))
+        {
+            isRunning = false;
+        }
+        else if(!isRunning)
+        {
+            moveSpeed = 2;
+            _moveState = MoveState.walking;
+            thePlayerAnimManager.Walk();
+            Debug.Log("4");
         }
     }
 
     public void For_Forward(Vector3 direction)
     {
         direction = transform.rotation * new Vector3(direction.x, 0, direction.z);
-        moveForce = new Vector3(direction.x * moveSpeed, moveForce.y, direction.z * moveSpeed);
+        moveForce = new Vector3(direction.x * (defaultSpeed + moveSpeed), moveForce.y, direction.z * moveSpeed);
 
-        if(direction == Vector3.zero)
+        if (direction == Vector3.zero)
         {
             thePlayerAnimManager.Idle();
             thePlayerController.IncreaseStamina = Time.deltaTime * 5;
         }
-        else
-            thePlayerAnimManager.Walk();
     }
 }
