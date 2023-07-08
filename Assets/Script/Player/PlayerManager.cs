@@ -63,7 +63,8 @@ public class PlayerManager : MonoBehaviour
             theCanvasManager.SetHideImage(true);
             theCanvasManager.SetInteractObject(true);
 
-            ControlMove(false, false);
+            ControlMove(false);
+            thePlayerController.canRotate = false;
 
             value = true;
         }
@@ -73,7 +74,8 @@ public class PlayerManager : MonoBehaviour
             theCanvasManager.SetHideImage(false);
             theCanvasManager.SetInteractObject(false);
 
-            ControlMove(true, true);
+            ControlMove(true);
+            thePlayerController.canRotate = true;
 
             value = false;
         }
@@ -99,7 +101,7 @@ public class PlayerManager : MonoBehaviour
     public void IncreaseSpeed() => thePlayerController.IncreaseMoveSpeed();
     public float ControlStamina() => thePlayerController.ControlStamina();
     public void AddStamina() => thePlayerController.AddStamina();
-    public void ControlMove(bool move, bool rotate) { thePlayerController.canMove = move; thePlayerController.canRotate = rotate; }
+    public void ControlMove(bool move) { thePlayerController.canMove = move;}
     public void LookFront() => transform.rotation = Quaternion.Euler(0, 90, 0);
     public void LerpRotation(Vector3 dir, float speed) => thePlayerController.LerpRotation(dir, speed);
 }

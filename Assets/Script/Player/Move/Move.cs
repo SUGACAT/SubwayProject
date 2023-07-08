@@ -22,6 +22,7 @@ public class Move : MonoBehaviour
 
     [SerializeField] bool isCrouching = false;
     [SerializeField] bool isRunning;
+    [SerializeField] bool isIdle;
     public bool canRun = true;
 
     [Header("Scripts")]
@@ -88,22 +89,31 @@ public class Move : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.LeftShift))
         {
-            if (!canRun) return;
-
             moveSpeed = 4;
             _moveState = MoveState.running;
             Debug.Log("3");
             isRunning = true;
+            thePlayerAnimManager.Run();
         }
-        else if(Input.GetKeyUp(KeyCode.LeftShift))
+        else if (Input.GetKeyUp(KeyCode.LeftShift))
         {
             isRunning = false;
+            thePlayerAnimManager.Walk();
         }
-        else if(!isRunning)
+        else if (!isRunning && !isIdle)
         {
             moveSpeed = 2;
             _moveState = MoveState.walking;
             thePlayerAnimManager.Walk();
+            Debug.Log("4");
+        }
+
+        if (canRun == false)
+        {
+            isRunning = false;
+            thePlayerAnimManager.Walk();
+            moveSpeed = 2;
+            _moveState = MoveState.walking;
             Debug.Log("4");
         }
     }
@@ -115,8 +125,14 @@ public class Move : MonoBehaviour
 
         if (direction == Vector3.zero)
         {
+            isIdle = true;
+
             thePlayerAnimManager.Idle();
             thePlayerController.IncreaseStamina = Time.deltaTime * 5;
+        }
+        else
+        {
+            isIdle = false;
         }
     }
 }

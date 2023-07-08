@@ -62,20 +62,19 @@ public class EventManager : MonoBehaviour
     {
         int number = GameManager.instance.eventNumber;
         
-        thePlayerManager.ControlMove(false, false);
+        thePlayerManager.ControlMove(false);
         thePlayerManager.LerpRotation(Vector3.zero, 1f);
 
         yield return new WaitForSeconds(Event_List[0].progressDuration[0]);
         
-        thePlayerManager.LookFront();
-        thePlayerManager.ControlMove(false, true);
+        thePlayerManager.SetRotate(false);
 
         e_CatMonster.transform.position = Event_List[0].startPos[0].position;
         e_CatMonster.SetActive(true);
 
         yield return new WaitForSeconds(Event_List[0].progressDuration[1]);
 
-        thePlayerManager.ControlMove(true, true);
+        thePlayerManager.ControlMove(true);
 
         yield return new WaitUntil(() =>  thePlayerManager.isHiding);
 

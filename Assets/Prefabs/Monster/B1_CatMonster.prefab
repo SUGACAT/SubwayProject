@@ -726,6 +726,8 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 256
   hitTargetList: []
+  B1cat: 0
+  B2cat: 0
   target: {fileID: 0}
   beforeRoamNumber: 0
 --- !u!54 &4081745391185026199

@@ -38,6 +38,12 @@ public class PlayerAnimationManager : MonoBehaviour
         anim.SetInteger("MoveState", 2);
     }
 
+    public void Run()
+    {
+        anim.SetInteger("MoveState", 3);
+    }
+
+
     public void StartAnim()
     {
 
