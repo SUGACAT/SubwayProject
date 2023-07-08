@@ -2,16 +2,24 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using DG.Tweening;
 
 public class PlayerController : MonoBehaviour
 {
+    [Header("Values")]
+    public bool canMove = true;
+    public bool canRotate = true;
+
+    public float currentStamina;
+    public float maxStamina;
+
+    [Header("Scripts")]
     private MouseRotate M_Rotate;
     private Move theMoveController;
-
-    public bool canMove = true;
-
-    public bool canRotate = true;
+    private PlayerManager thePlayerManager;
+    public float DecreaseStamina { get => currentStamina; set => currentStamina -= value; }
+    public float IncreaseStamina { get => currentStamina; set => currentStamina += value; }
 
     void Awake()
     {
@@ -19,17 +27,31 @@ public class PlayerController : MonoBehaviour
         Cursor.lockState = CursorLockMode.Locked;
         M_Rotate = GetComponent<MouseRotate>();
         theMoveController = GetComponent<Move>();
+        thePlayerManager = GetComponent<PlayerManager>();
+    }
+
+    private void Start()
+    {
+        currentStamina = maxStamina;
     }
 
     // Update is called once per frame
     void Update()
     {
-        if ((canMove && canRotate) == false) return;
-
+        if(canRotate == false) return;
         UpdateRotate();
+        
+        if(canMove == false) return;
         UpdateMove();
     }
 
+    public float ControlStamina()
+    {
+        currentStamina = currentStamina >= maxStamina ? maxStamina : currentStamina;
+
+        return currentStamina;
+    }
+    
     public void LookFront() 
     {
         M_Rotate.UpdateRotate(90f, 0f);
@@ -44,7 +66,7 @@ public class PlayerController : MonoBehaviour
     {
         float mouseX = Input.GetAxis("Mouse X");
         float mouseY = Input.GetAxis("Mouse Y");
-        M_Rotate.UpdateRotate(mouseX, mouseY);  
+        M_Rotate.UpdateRotate(mouseX, mouseY);
     }
 
     private void UpdateMove()

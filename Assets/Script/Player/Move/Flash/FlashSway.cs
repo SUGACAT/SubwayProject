@@ -2,10 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class LightSway : MonoBehaviour
+public class FlashSway : MonoBehaviour
 {
+    [Header("FlashSway")]
     private Vector3 originPos;
-
     private Vector3 currentPos;
 
     [SerializeField]
@@ -50,7 +50,7 @@ public class LightSway : MonoBehaviour
         transform.localPosition = currentPos;
     }
 
-    private void BackToOriginPos() 
+    private void BackToOriginPos()
     {
         currentPos = Vector3.Lerp(currentPos, originPos, smoothSway.x);
         transform.localPosition = currentPos;

@@ -2,17 +2,42 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+[System.Serializable]
+public class SpawnPoint
+{
+    public string name;
+    public int missionNumber;
+    public Vector3 point;
+}
+
 public class GameManager : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    public static GameManager instance;
+
+    [Header("Values")]
+    public SpawnPoint[] spawnList;
+    
+    [Header("Scripts")]
+    private MonsterSpawner theMonsterSpawner;
+    private EventManager theEventManager;
+    [HideInInspector] public CatManager theCatManager;
+
+    private void Awake()
     {
-        
+        instance = this;
+
+        AssignScript();
     }
 
-    // Update is called once per frame
-    void Update()
+    private void AssignScript()
     {
-        
+        theMonsterSpawner = GetComponentInChildren<MonsterSpawner>();
+        theEventManager = GetComponentInChildren<EventManager>();
+        theCatManager = GetComponentInChildren<CatManager>();
+    }
+
+    public void StartMonsterSpawn()
+    {
+        theMonsterSpawner.SpawnMonster(1);
     }
 }

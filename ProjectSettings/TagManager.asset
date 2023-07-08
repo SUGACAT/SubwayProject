@@ -6,6 +6,8 @@ TagManager:
   tags:
   - FlashContainer
   - Interactable
+  - Monster
+  - MonsterAttackArea
   layers:
   - Default
   - TransparentFX
@@ -13,9 +15,9 @@ TagManager:
   - 
   - Water
   - UI
-  - 
-  - 
-  - 
+  - Player
+  - Monster
+  - Obstacle
   - 
   - 
   - 

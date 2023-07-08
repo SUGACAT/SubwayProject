@@ -33,7 +33,7 @@ public class Interact : MonoBehaviour
     private RaycastHit hit = new RaycastHit();
     private Ray ray;
 
-    private InteractableObject interactedObject;
+    public InteractableObject interactedObject;
     
     [Header("Check")]
     public bool canInteract = false;
@@ -66,7 +66,7 @@ public class Interact : MonoBehaviour
             {
                 var i_Component = hit.transform.gameObject.GetComponent<InteractableObject>();
 
-                if (i_Component.interacted) { return; }
+                if (i_Component.interacted && obj_CodeName != "SandBox") { return; }
 
                 obj_CodeName = i_Component.codeName;
                 interactedObject = i_Component;
@@ -76,44 +76,68 @@ public class Interact : MonoBehaviour
             }
             else
             {
+                if (!thePlayerManager.isHiding)
+                {
+                    theCanvasManager.SetInteractObject(false);
+                    theCanvasManager.ResetInteractValue();
+                    canInteract = false;
+                }
+            }
+        }
+        else
+        {
+            if (!thePlayerManager.isHiding)
+            {
                 theCanvasManager.SetInteractObject(false);
                 theCanvasManager.ResetInteractValue();
                 canInteract = false;
             }
         }
-        else
-        {
-            theCanvasManager.SetInteractObject(false);
-            theCanvasManager.ResetInteractValue();
-            canInteract = false;
-        }
     }
 
     public void InteractSucceed()
     {
+        canInteract = false;
+
         Debug.Log("Interact Complete");
-        interactedObject.GetComponent<InteractableObject>().interacted = true;
 
         switch (obj_CodeName)
         {
             case "FlashContainer":
-                Code_Flash();
+                Command_Flash();
+                break;
+            case "SandBox" :
+                Command_Sand();
                 break;
         }
-
-        theCanvasManager.SetInteractObject(false);
-
-        canInteract = false;
+        Action action = new Action(commandValue);
+        action.operate();
     }
 
-    public void Code_Flash()
+    public void Command_Flash()
     {
         thePlayerManager.GetFlash();
-        thePlayerManager.PlayEvent(0);
+        thePlayerManager.PlayEvent(1);
         
         commandValue = new GetFlashCommand(new FlashBox());
-        Action action = new Action(commandValue);
+        interactedObject.interacted = true;
+    }
 
-        action.operate();
+    public void Command_Sand()
+    {
+        if (!thePlayerManager.isHiding)
+        {
+            interactedObject.SetChildObjects(false);
+            thePlayerManager.Hide("In", interactedObject.transform.position, ref canInteract);
+
+            commandValue = new GetSandBoxCommand(new SandBox());
+            interactedObject.interacted = true;
+        }
+        else
+        {
+            interactedObject.SetChildObjects(true);
+            thePlayerManager.Hide("Out", interactedObject.OutPos().transform.position, ref canInteract);
+            interactedObject.interacted = false;
+        }
     }
 }
