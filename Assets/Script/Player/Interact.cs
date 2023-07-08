@@ -117,7 +117,7 @@ public class Interact : MonoBehaviour
     public void Command_Flash()
     {
         thePlayerManager.GetFlash();
-        thePlayerManager.PlayEvent(1);
+        thePlayerManager.theEventManager.FirstAppearEvent();
         
         commandValue = new GetFlashCommand(new FlashBox());
         interactedObject.interacted = true;

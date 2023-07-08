@@ -52,6 +52,7 @@ public class CanvasManager : MonoBehaviour
         yield return new WaitForSeconds(4.2f);
 
         Destroy(background_Img);
+        thePlayerManager.SetRotate(false);
     }
 
     public void SetStaminaBar()
