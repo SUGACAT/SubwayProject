@@ -22,6 +22,7 @@ public class Move : MonoBehaviour
 
     [SerializeField] bool isCrouching = false;
     [SerializeField] bool isRunning;
+    public bool canRun = true;
 
     [Header("Scripts")]
     private CharacterController characterController;
@@ -87,6 +88,8 @@ public class Move : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.LeftShift))
         {
+            if (!canRun) return;
+
             moveSpeed = 4;
             _moveState = MoveState.running;
             Debug.Log("3");
@@ -108,7 +111,7 @@ public class Move : MonoBehaviour
     public void For_Forward(Vector3 direction)
     {
         direction = transform.rotation * new Vector3(direction.x, 0, direction.z);
-        moveForce = new Vector3(direction.x * (defaultSpeed + moveSpeed), moveForce.y, direction.z * moveSpeed);
+        moveForce = new Vector3(direction.x * (defaultSpeed + moveSpeed), moveForce.y, direction.z * (defaultSpeed + moveSpeed));
 
         if (direction == Vector3.zero)
         {

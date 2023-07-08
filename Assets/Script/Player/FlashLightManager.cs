@@ -49,13 +49,23 @@ public class FlashLightManager : MonoBehaviour
 
     public void SetLight(bool type)
     {
+
         light_obj.SetActive(type);
         isOn = type;
     }
 
     public void DecreaseBattery()
     {
-            currentBattery -= Time.deltaTime * decreaseSpeed;
+        if (currentBattery >= maxBattery)
+            currentBattery = maxBattery;
+        else if (currentBattery <= 0)
+        {
+            currentBattery = 0;
+            SetLight(false);
+            return;
+        }
+
+        currentBattery -= Time.deltaTime * decreaseSpeed;
     }
 
     public void ChangeFlashLight()

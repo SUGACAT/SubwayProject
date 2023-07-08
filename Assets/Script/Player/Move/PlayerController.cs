@@ -69,6 +69,14 @@ public class PlayerController : MonoBehaviour
     {
         currentStamina = currentStamina >= maxStamina ? maxStamina : currentStamina;
 
+        if (currentStamina <= 0)
+        {
+            currentStamina = 0;
+            theMoveController.canRun = false;
+        }
+        else
+            theMoveController.canRun = true;
+
         return currentStamina;
     }
 
