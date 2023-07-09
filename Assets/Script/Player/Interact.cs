@@ -119,7 +119,12 @@ public class Interact : MonoBehaviour
             case "Battery":
                 Command_Battery();
                 break;
-
+            case "LeverKeyring":
+                thePlayerManager.ShowKeyEvent("LeverKeyring");
+                return;
+            case "CatKeyring":
+                thePlayerManager.ShowKeyEvent("CatKeyring");
+                return;
         }
         Action action = new Action(commandValue);
         action.operate();

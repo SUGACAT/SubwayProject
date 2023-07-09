@@ -19,16 +19,13 @@ public class Move : MonoBehaviour
     private Vector3 moveForce;
 
     public MoveState _moveState;
-
-    [SerializeField] bool isCrouching = false;
-    [SerializeField] bool isRunning;
-    [SerializeField] bool isIdle;
     public bool canRun = true;
 
     [Header("Scripts")]
     private CharacterController characterController;
     private PlayerAnimationManager thePlayerAnimManager;
     private PlayerController thePlayerController;
+    private PlayerManager thePlayerManager;
 
     [SerializeField]
     private float gravity;
@@ -38,6 +35,7 @@ public class Move : MonoBehaviour
         characterController = GetComponent<CharacterController>();
         thePlayerController = GetComponent<PlayerController>();
         thePlayerAnimManager = GetComponent<PlayerAnimationManager>();
+        thePlayerManager = GetComponent<PlayerManager>();
     }
 
     void Update()
@@ -68,9 +66,7 @@ public class Move : MonoBehaviour
             _moveState = MoveState.crawling;
             thePlayerAnimManager.Crouch();
 
-            isCrouching = true;
-
-            Debug.Log("1");
+            thePlayerManager.isCrouching = true;
         }
         else if(Input.GetKeyUp(KeyCode.LeftControl)) 
         {
@@ -78,12 +74,11 @@ public class Move : MonoBehaviour
             _moveState = MoveState.walking;
             thePlayerAnimManager.Walk();
 
-            isCrouching = false;
-
-            Debug.Log("2");
+            thePlayerManager.isCrouching = false;
+            Debug.Log("1");
         }
 
-        if (isCrouching) return;
+        if (thePlayerManager.isCrouching) return;
 
         ////--------------------//
 
@@ -91,16 +86,17 @@ public class Move : MonoBehaviour
         {
             moveSpeed = 4;
             _moveState = MoveState.running;
-            Debug.Log("3");
-            isRunning = true;
+            thePlayerManager.isRunning = true;
             thePlayerAnimManager.Run();
+            Debug.Log("2");
         }
         else if (Input.GetKeyUp(KeyCode.LeftShift))
         {
-            isRunning = false;
+            thePlayerManager.isRunning = false;
             thePlayerAnimManager.Walk();
+            Debug.Log("3");
         }
-        else if (!isRunning && !isIdle)
+        else if (!thePlayerManager.isRunning && !thePlayerManager.isIdle)
         {
             moveSpeed = 2;
             _moveState = MoveState.walking;
@@ -110,11 +106,11 @@ public class Move : MonoBehaviour
 
         if (canRun == false)
         {
-            isRunning = false;
+            thePlayerManager.isRunning = false;
             thePlayerAnimManager.Walk();
             moveSpeed = 2;
             _moveState = MoveState.walking;
-            Debug.Log("4");
+            Debug.Log("5");
         }
     }
 
@@ -123,16 +119,16 @@ public class Move : MonoBehaviour
         direction = transform.rotation * new Vector3(direction.x, 0, direction.z);
         moveForce = new Vector3(direction.x * (defaultSpeed + moveSpeed), moveForce.y, direction.z * (defaultSpeed + moveSpeed));
 
-        if (direction == Vector3.zero)
+        if ((direction == Vector3.zero) && !thePlayerManager.isCrouching)
         {
-            isIdle = true;
+            thePlayerManager.isIdle = true;
 
             thePlayerAnimManager.Idle();
             thePlayerController.IncreaseStamina = Time.deltaTime * 5;
         }
         else
         {
-            isIdle = false;
+            thePlayerManager.isIdle = false;
         }
     }
 }

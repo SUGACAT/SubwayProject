@@ -16,7 +16,8 @@ public class CanvasManager : MonoBehaviour
     public Image staminaBar_Img;
     public GameObject hideSight_Obj;
     public GameObject death_Obj;
-    
+    public GameObject allUI, eventUI;
+
     [Header("Objects")]
     public GameObject interact_Obj;
 
@@ -71,7 +72,7 @@ public class CanvasManager : MonoBehaviour
         {
             if (theInteract.canInteract)
             {
-                interactValue += (Time.deltaTime / 2);
+                interactValue += (Time.deltaTime);
 
                 interact_Img.fillAmount = interactValue;
 
@@ -86,6 +87,12 @@ public class CanvasManager : MonoBehaviour
         {
             ResetInteractValue();
         }
+    }
+
+    public void HideUI(bool type)
+    {
+        allUI.SetActive(!type);
+        eventUI.SetActive(type);
     }
 
     public void SetHideImage(bool value)

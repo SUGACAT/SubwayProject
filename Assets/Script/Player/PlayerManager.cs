@@ -7,6 +7,10 @@ using Unity.VisualScripting;
 
 public class PlayerManager : MonoBehaviour
 {
+    public bool isCrouching = false;
+    public bool isRunning;
+    public bool isIdle;
+
     [Header("Scripts")]
     private PlayerController thePlayerController;
     [HideInInspector] public CharacterController theCharacterController;
@@ -97,6 +101,7 @@ public class PlayerManager : MonoBehaviour
         SetRotate(true);
     }
 
+    public void ShowKeyEvent(string codeName) => theEventManager.ShowKeyringEvent(codeName);
     public void AddBattery() => theFlashLightManager.AddBattery();
     public void IncreaseSpeed() => thePlayerController.IncreaseMoveSpeed();
     public float ControlStamina() => thePlayerController.ControlStamina();

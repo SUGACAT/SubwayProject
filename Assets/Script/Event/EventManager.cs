@@ -24,12 +24,24 @@ public class Event
 
 public class EventManager : MonoBehaviour
 {
+    [Header("Values")]
+    public bool isKeyring = false;
+    public string currentKey;
+
+    public int keyInputCount;
+    public int keyLength;
+
+    private KeyCode keyCode1;
+    private KeyCode keyCode2;
+
     [Header("Events")]
     public Event[] Event_List;
 
     [Header("Prefabs")]
     public GameObject e_CatMonster, e_RatMonster;
     public GameObject deathObject;
+
+    public GameObject leverKeyObj, catKeyObj;
     
     [Header("Scripts")]
     public CanvasManager theCanvasManager;
@@ -42,6 +54,66 @@ public class EventManager : MonoBehaviour
         AwakeEvent("Start");
     }
 
+    private void Update()
+    {
+        if (isKeyring)
+        {
+            if (Input.GetKeyDown(KeyCode.Escape))
+            {
+                thePlayerManager.theCanvasManager.HideUI(false);
+                thePlayerManager.gameObject.SetActive(true);
+                switch (currentKey)
+                {
+                    case "Lever":
+                        leverKeyObj.gameObject.SetActive(false);
+                        break;
+                    case "Cat":
+                        catKeyObj.gameObject.SetActive(false);
+                        break;
+                }
+
+                isKeyring = false;
+            }
+        }
+
+        if (keyInputCount < 0) keyInputCount = 0;
+
+        if (Input.GetKeyDown(keyCode1))
+        {
+            keyInputCount++;
+        }
+        else if(Input.GetKeyUp(keyCode1))
+        {
+            keyInputCount--;
+        }
+
+        if (keyLength != 2) return;
+
+        if(Input.GetKeyDown(keyCode2))
+        {
+            keyInputCount++;
+        }
+        else if(Input.GetKeyUp(keyCode2))
+        {
+            keyInputCount--;
+        }
+
+        if(keyInputCount == 1 && keyLength == 1)
+        {
+            Debug.Log("object unlocked_1");
+            keyInputCount = 0;
+            keyCode1 = KeyCode.None;
+            keyCode2 = KeyCode.None;
+        }
+        else if(keyInputCount == 2 && keyLength == 2)
+        {
+            Debug.Log("object unlocked_2");
+            keyInputCount = 0;
+            keyCode1 = KeyCode.None;
+            keyCode2 = KeyCode.None;
+        }
+    }
+
     public void AwakeEvent(string type)
     {
         if (type == "Start")
@@ -49,7 +121,7 @@ public class EventManager : MonoBehaviour
             theCanvasManager.FadeImageEvent();
             thePlayerManager.LookFront();
             
-            thePlayerManager.SetRotate(true);
+            //thePlayerManager.SetRotate(true); // Set Player Roataion false
         }   
     }
 
@@ -87,14 +159,38 @@ public class EventManager : MonoBehaviour
         GameManager.instance.StartMonsterSpawn(1);
     }
 
-    /*public void LobbyAppearEvent()
+    public void ShowKeyringEvent(string codeName)
     {
-        e_CatMonster.transform.position = Event_List[2].startPos[0].position;
-        e_CatMonster.SetActive(true);
-        
-        Debug.Log("LobbyAppear");
-    }*/
+        isKeyring = true;
+
+        thePlayerManager.theCanvasManager.HideUI(true);
+        thePlayerManager.gameObject.SetActive(false);
+
+        switch (codeName)
+        {
+            case "LeverKeyring":
+                leverKeyObj.gameObject.SetActive(true);
+                currentKey = "Lever";
+
+                keyCode1 = KeyCode.F;
+                keyLength = 1;
+                break;
+            case "CatKeyring":
+                catKeyObj.gameObject.SetActive(true);
+                currentKey = "Cat";
+
+                keyCode1 = KeyCode.E;
+                keyCode2 = KeyCode.B;
+                keyLength = 2;
+                break;
+        }
+    }
     
+    public void ShowMissionSceneEvent(string name)
+    {
+
+    }
+
     public void DeathEvent(bool type)
     {
         thePlayerManager.gameObject.SetActive(!type);

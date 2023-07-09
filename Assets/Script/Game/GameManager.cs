@@ -23,6 +23,7 @@ public class GameManager : MonoBehaviour
     private MonsterSpawner theMonsterSpawner;
     private EventManager theEventManager;
     [HideInInspector] public CatManager theCatManager;
+    public PlayerManager thePlayerManager;
 
     private void Awake()
     {

@@ -8,6 +8,7 @@ TagManager:
   - Interactable
   - Monster
   - MonsterAttackArea
+  - Gate
   layers:
   - Default
   - TransparentFX
