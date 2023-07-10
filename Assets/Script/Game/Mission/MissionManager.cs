@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class MissionManager : MonoBehaviour
 {
@@ -16,16 +17,23 @@ public class MissionManager : MonoBehaviour
      * for what? -> 불 키기?
      */
 
-    public GameObject missionUi;
+    
+
+    //public GameObject missionUi;
     public GameObject[] missions;
+    public GameObject[] clearedMissions;
 
-    private void MissionChecker()
+    private void Update()
     {
-
+        LoadMissionChecker();
     }
 
-    private void MissionToUI()
+    private void LoadMissionChecker()
     {
-
+        if (Input.GetKeyDown(KeyCode.Tab))
+        {
+            SceneManager.LoadScene("MissionScene");
+        }
+        
     }
 }
