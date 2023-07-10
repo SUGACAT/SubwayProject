@@ -18,6 +18,7 @@ public class PlayerManager : MonoBehaviour
     public CanvasManager theCanvasManager;
     private MouseRotate theMouseRotate;
     private FlashLightManager theFlashLightManager;
+    private MakeSound theMakeSound;
 
     [Header("Prefabs")]
     public GameObject flash_Obj, defaultLight;
@@ -33,6 +34,7 @@ public class PlayerManager : MonoBehaviour
         theCharacterController = GetComponent<CharacterController>();
         theMouseRotate = GetComponent<MouseRotate>();
         theFlashLightManager = GetComponentInChildren<FlashLightManager>();
+        theMakeSound = GetComponent<MakeSound>();
     }
 
     private void Start()
@@ -57,6 +59,11 @@ public class PlayerManager : MonoBehaviour
     {
         flash_Obj.SetActive(true);
         defaultLight.SetActive(false);
+    }
+
+    public void GetNewFlash()
+    {
+        theFlashLightManager.ChangeFlashLight();
     }
 
     public void Hide(string type, Vector3 pos, ref bool value)
@@ -101,6 +108,8 @@ public class PlayerManager : MonoBehaviour
         SetRotate(true);
     }
 
+
+    public void MakeNoise() => theMakeSound.MakeNoise();
     public void ShowKeyEvent(string codeName) => theEventManager.ShowKeyringEvent(codeName);
     public void AddBattery() => theFlashLightManager.AddBattery();
     public void IncreaseSpeed() => thePlayerController.IncreaseMoveSpeed();

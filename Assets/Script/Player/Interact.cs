@@ -34,19 +34,25 @@ public class Interact : MonoBehaviour
     private Ray ray;
 
     public InteractableObject interactedObject;
-    
+
+    public Lever currentLever;
+
     [Header("Check")]
     public bool canInteract = false;
+
+    public bool canGetFlashlight = false;
 
     [Header("Scripts")]
     public CanvasManager theCanvasManager;
     public Inventory theInventory;
     private PlayerManager thePlayerManager;
+    private MissionInput theMissionInput;
 
     // Start is called before the first frame update
     void Awake()
     {
         thePlayerManager = GetComponent<PlayerManager>();
+        theMissionInput = GetComponent<MissionInput>();
     }
 
     // Update is called once per frame
@@ -75,12 +81,29 @@ public class Interact : MonoBehaviour
                 theCanvasManager.SetInteractObject(true);
                 canInteract = true;
             }
+            else if (hit.transform.CompareTag("Lever"))
+            {
+                currentLever = hit.transform.gameObject.GetComponentInParent<Lever>();
+                if (currentLever.leverOn || currentLever.isWait) return;
+
+                currentLever.canPull = true;
+                currentLever.ShowLeverImage(true);
+
+                theCanvasManager.SetLeverInteractObject(true);
+                canInteract = true;
+            }
             else
             {
                 if (!thePlayerManager.isHiding)
                 {
                     theCanvasManager.SetInteractObject(false);
+                    theCanvasManager.SetLeverInteractObject(false);
                     theCanvasManager.ResetInteractValue();
+                    if (currentLever != null)
+                    {
+                        currentLever.canPull = false;
+                        currentLever.ShowLeverImage(false);
+                    }
                     canInteract = false;
                 }
             }
@@ -90,7 +113,13 @@ public class Interact : MonoBehaviour
             if (!thePlayerManager.isHiding)
             {
                 theCanvasManager.SetInteractObject(false);
+                theCanvasManager.SetLeverInteractObject(false);
                 theCanvasManager.ResetInteractValue();
+                if (currentLever != null)
+                {
+                    currentLever.canPull = false;
+                    currentLever.ShowLeverImage(false);
+                }
                 canInteract = false;
             }
         }
@@ -125,10 +154,27 @@ public class Interact : MonoBehaviour
             case "CatKeyring":
                 thePlayerManager.ShowKeyEvent("CatKeyring");
                 return;
+            case "Lever":
+                break;
+                
         }
         Action action = new Action(commandValue);
         action.operate();
     }
+
+    public void StartLeverInput()
+    {
+
+    }
+
+    public void EndLeverInput()
+    {
+
+    }
+
+    /// <summary>
+    /// //////////////////////////////////////////////////
+    /// </summary>
 
     public void Command_Sand()
     {
@@ -150,11 +196,19 @@ public class Interact : MonoBehaviour
 
     public void Command_Flash()
     {
-        thePlayerManager.GetFlash();
-        thePlayerManager.theEventManager.FirstAppearEvent();
+        if (!canGetFlashlight)
+        {
+            thePlayerManager.GetFlash();
+            thePlayerManager.theEventManager.FirstAppearEvent();
 
-        commandValue = new GetFlashCommand(new FlashBox());
-        interactedObject.interacted = true;
+            commandValue = new GetFlashCommand(new FlashBox());
+            interactedObject.interacted = true;
+            canGetFlashlight = true;
+        }
+        else
+        {
+            thePlayerManager.GetNewFlash();
+        }
     }
 
     public void Command_Drink()

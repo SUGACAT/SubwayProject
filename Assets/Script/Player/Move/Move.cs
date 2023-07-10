@@ -75,7 +75,6 @@ public class Move : MonoBehaviour
             thePlayerAnimManager.Walk();
 
             thePlayerManager.isCrouching = false;
-            Debug.Log("1");
         }
 
         if (thePlayerManager.isCrouching) return;
@@ -88,20 +87,17 @@ public class Move : MonoBehaviour
             _moveState = MoveState.running;
             thePlayerManager.isRunning = true;
             thePlayerAnimManager.Run();
-            Debug.Log("2");
         }
         else if (Input.GetKeyUp(KeyCode.LeftShift))
         {
             thePlayerManager.isRunning = false;
             thePlayerAnimManager.Walk();
-            Debug.Log("3");
         }
         else if (!thePlayerManager.isRunning && !thePlayerManager.isIdle)
         {
             moveSpeed = 2;
             _moveState = MoveState.walking;
             thePlayerAnimManager.Walk();
-            Debug.Log("4");
         }
 
         if (canRun == false)
@@ -110,7 +106,6 @@ public class Move : MonoBehaviour
             thePlayerAnimManager.Walk();
             moveSpeed = 2;
             _moveState = MoveState.walking;
-            Debug.Log("5");
         }
     }
 

@@ -49,7 +49,6 @@ public class FlashLightManager : MonoBehaviour
 
     public void SetLight(bool type)
     {
-
         light_obj.SetActive(type);
         isOn = type;
     }

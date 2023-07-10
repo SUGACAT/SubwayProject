@@ -37,12 +37,15 @@ public class EventManager : MonoBehaviour
     [Header("Events")]
     public Event[] Event_List;
 
+    public GameObject leverKeyObj, catKeyObj;
+    public Animator showEvent;
+
     [Header("Prefabs")]
     public GameObject e_CatMonster, e_RatMonster;
     public GameObject deathObject;
 
-    public GameObject leverKeyObj, catKeyObj;
-    
+    public GameObject eventCollider;
+
     [Header("Scripts")]
     public CanvasManager theCanvasManager;
     public PlayerManager thePlayerManager;
@@ -76,6 +79,25 @@ public class EventManager : MonoBehaviour
             }
         }
 
+        if (keyInputCount == 1 && keyLength == 1)
+        {
+            Debug.Log("object unlocked_1");
+            keyInputCount = 0;
+            keyCode1 = KeyCode.None;
+            keyCode2 = KeyCode.None;
+
+            ShowMissionSceneEvent("LeverKeyring");
+        }
+        else if (keyInputCount == 2 && keyLength == 2)
+        {
+            Debug.Log("object unlocked_2");
+            keyInputCount = 0;
+            keyCode1 = KeyCode.None;
+            keyCode2 = KeyCode.None;
+
+            ShowMissionSceneEvent("CatKeyring");
+        }
+
         if (keyInputCount < 0) keyInputCount = 0;
 
         if (Input.GetKeyDown(keyCode1))
@@ -96,21 +118,6 @@ public class EventManager : MonoBehaviour
         else if(Input.GetKeyUp(keyCode2))
         {
             keyInputCount--;
-        }
-
-        if(keyInputCount == 1 && keyLength == 1)
-        {
-            Debug.Log("object unlocked_1");
-            keyInputCount = 0;
-            keyCode1 = KeyCode.None;
-            keyCode2 = KeyCode.None;
-        }
-        else if(keyInputCount == 2 && keyLength == 2)
-        {
-            Debug.Log("object unlocked_2");
-            keyInputCount = 0;
-            keyCode1 = KeyCode.None;
-            keyCode2 = KeyCode.None;
         }
     }
 
@@ -155,8 +162,12 @@ public class EventManager : MonoBehaviour
         yield return new WaitForSeconds(Event_List[0].progressDuration[2]);
 
         e_CatMonster.SetActive(false);
-        Debug.Log("Monster Is Gone");
         GameManager.instance.StartMonsterSpawn(1);
+        GameManager.instance.StartMonsterSpawn(2);
+
+        theCanvasManager.ShowCheckpointUI();
+
+        eventCollider.SetActive(false);
     }
 
     public void ShowKeyringEvent(string codeName)
@@ -184,11 +195,39 @@ public class EventManager : MonoBehaviour
                 keyLength = 2;
                 break;
         }
+
+        theCanvasManager.ShowMissionUI("New Mission");
     }
     
     public void ShowMissionSceneEvent(string name)
     {
+        showEvent.gameObject.SetActive(true);
+        isKeyring = false;
 
+        switch (name)
+        {
+            case "LeverKeyring":
+                thePlayerManager.gameObject.SetActive(false);
+                leverKeyObj.SetActive(false);
+
+                showEvent.SetTrigger("ShowLever");
+                StartCoroutine(ShowEventCoroutine(14.3f));
+                break;
+            case "CatKeyring":
+                thePlayerManager.gameObject.SetActive(false);
+                catKeyObj.SetActive(false);
+                break;
+        }
+    }
+
+    IEnumerator ShowEventCoroutine(float time)
+    {
+        yield return new WaitForSeconds(time);
+        isKeyring = true;
+
+        keyCode1 = KeyCode.F;
+        leverKeyObj.SetActive(true);
+        showEvent.gameObject.SetActive(false);
     }
 
     public void DeathEvent(bool type)

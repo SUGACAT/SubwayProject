@@ -17,6 +17,8 @@ public class RatMove : MonoBehaviour
     private NavMeshAgent _agent;
     private Animator anim;
 
+    public GameObject bangMark;
+
     private void Awake()
     {
         _agent = GetComponent<NavMeshAgent>();
@@ -33,11 +35,14 @@ public class RatMove : MonoBehaviour
     void Update()
     {
         _agent.SetDestination(target.transform.position);
-    }
 
+        if(_agent.velocity == Vector3.zero)
+            anim.SetBool("isIdle", true);
+        else
+            anim.SetBool("isIdle", false);
+    }
     IEnumerator Roaming()
     {
-        anim.SetBool("isIdle", false);
         target.transform.position = transform.position - Random.insideUnitSphere * maxDistance;
         target.transform.position = new Vector3(target.transform.position.x ,this.transform.position.y, target.transform.position.z);
 
@@ -46,5 +51,10 @@ public class RatMove : MonoBehaviour
         yield return new WaitForSeconds(randomTime);
 
         StartCoroutine(Roaming());
+    }
+
+    public void HearSound()
+    {
+        bangMark.SetActive(true);
     }
 }

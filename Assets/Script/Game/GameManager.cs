@@ -24,6 +24,8 @@ public class GameManager : MonoBehaviour
     private EventManager theEventManager;
     [HideInInspector] public CatManager theCatManager;
     public PlayerManager thePlayerManager;
+    public CanvasManager theCanvasManager;
+    public MissionManager theMissionManager;
 
     private void Awake()
     {

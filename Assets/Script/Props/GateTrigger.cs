@@ -27,9 +27,11 @@ public class GateTrigger : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
-            if(!other.transform.GetComponent<PlayerManager>().isCrouching)
+            var playerComponent = other.transform.GetComponent<PlayerManager>();
+
+            if (!playerComponent.isCrouching)
             {
-                Debug.Log("Cought");
+                playerComponent.MakeNoise();
             }
         }
     }
