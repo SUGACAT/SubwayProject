@@ -10,6 +10,7 @@ TagManager:
   - MonsterAttackArea
   - Gate
   - Lever
+  - Door
   layers:
   - Default
   - TransparentFX

@@ -92,6 +92,12 @@ public class Interact : MonoBehaviour
                 theCanvasManager.SetLeverInteractObject(true);
                 canInteract = true;
             }
+            else if(hit.transform.CompareTag("Door"))
+            {
+                var doorComponent = hit.transform.gameObject.GetComponent<Door>();
+
+                doorComponent.DivisionType();
+            }
             else
             {
                 if (!thePlayerManager.isHiding)
