@@ -26,7 +26,7 @@ public class CanvasManager : MonoBehaviour
     public Image staminaBar_Img;
     public GameObject hideSight_Obj;
     public GameObject death_Obj;
-    public GameObject allUI, eventUI;
+    public GameObject allUI, eventUI, cctvUI;
 
     [Header("Objects")]
     public GameObject interact_Obj;
@@ -80,6 +80,12 @@ public class CanvasManager : MonoBehaviour
     public void SetLeverInteractObject(bool value)
     {
         leverInteract_Obj.SetActive(value);
+    }
+
+    public void ShowCCTVUI(bool value)
+    {
+        cctvUI.SetActive(value);
+        allUI.SetActive(!value);
     }
 
     public void ShowMissionUI(string txt)

@@ -43,8 +43,7 @@ public class Levers : MonoBehaviour
         if (!canPull || leverOn  || isWait) return;
 
         InputKey();
-        fill_img.fillAmount = interactValue / 100;
-        Debug.Log(interactValue / 100);
+        fill_img.fillAmount = interactValue / 70;
 
         if (interactValue >= targetValue)
         {
@@ -84,7 +83,7 @@ public class Levers : MonoBehaviour
 
             GameManager.instance.theCanvasManager.SetLeverInteractImageColor(1);
 
-            lever_obj.transform.localRotation = Quaternion.Euler(new Vector3(0,0, -interactValue));
+            lever_obj.transform.localRotation = Quaternion.Euler(new Vector3(0,0, -interactValue * 1.5f));
 
             interactValue++;
             Debug.Log("Key1Down");
@@ -101,7 +100,7 @@ public class Levers : MonoBehaviour
             canKey2 = false;
 
             GameManager.instance.theCanvasManager.SetLeverInteractImageColor(2);
-            lever_obj.transform.localRotation = Quaternion.Euler(new Vector3(0, 0, -interactValue));
+            lever_obj.transform.localRotation = Quaternion.Euler(new Vector3(0, 0, -interactValue * 1.5f));
 
             interactValue++;
             Debug.Log("Key2Down");
