@@ -8,17 +8,19 @@ TagManager:
   - Interactable
   - Monster
   - MonsterAttackArea
+  - Gate
+  - Lever
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - PostProcess
   - Water
   - UI
   - Player
   - Monster
   - Obstacle
-  - 
+  - Rat
   - 
   - 
   - 

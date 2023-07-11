@@ -4,11 +4,21 @@ using UnityEngine;
 using UnityEngine.UI;
 using DG.Tweening;
 using UnityEngine.Serialization;
+using TMPro;
 
 public class CanvasManager : MonoBehaviour
 {
     [Header("Value")]
     public float interactValue = 0;
+
+    public Image key1Image;
+    public Image key2Image;
+    public Animator keyPushAnimator;
+
+    public Animator missionCompleteAnimator;
+    public TextMeshProUGUI missionComplete_txt;
+
+    public Animator checkpointText;
 
     [Header("Prefabs")]
     public Image background_Img;
@@ -16,9 +26,11 @@ public class CanvasManager : MonoBehaviour
     public Image staminaBar_Img;
     public GameObject hideSight_Obj;
     public GameObject death_Obj;
-    
+    public GameObject allUI, eventUI;
+
     [Header("Objects")]
     public GameObject interact_Obj;
+    public GameObject leverInteract_Obj;
 
     [Header("Scripts")]
     public EventManager theEventManager;
@@ -65,13 +77,47 @@ public class CanvasManager : MonoBehaviour
         interact_Obj.SetActive(value);
     }
 
+    public void SetLeverInteractObject(bool value)
+    {
+        leverInteract_Obj.SetActive(value);
+    }
+
+    public void ShowMissionUI(string txt)
+    {
+        missionCompleteAnimator.SetTrigger("Complete");
+        missionComplete_txt.text = txt;
+    }
+
+    public void ShowCheckpointUI()
+    {
+        checkpointText.SetTrigger("Checkpoint");
+    }
+
+    public void SetLeverInteractImageColor(int number)
+    {
+        if (number == 2)
+        {
+            key1Image.color = new Color32(125, 0, 0, 210);
+            key2Image.color = new Color32(51, 51, 51, 210);
+
+            keyPushAnimator.SetBool("Lever1Click", true);
+        }
+        else
+        {
+            key1Image.color = new Color32(51, 51, 51, 210);
+            key2Image.color = new Color32(125, 0, 0, 210);
+
+            keyPushAnimator.SetBool("Lever1Click", false);
+        }
+    }
+
     public void SetInteractValue()
     {
         if (Input.GetKey(KeyCode.E))
         {
             if (theInteract.canInteract)
             {
-                interactValue += (Time.deltaTime / 2);
+                interactValue += (Time.deltaTime / 1.6f);
 
                 interact_Img.fillAmount = interactValue;
 
@@ -86,6 +132,12 @@ public class CanvasManager : MonoBehaviour
         {
             ResetInteractValue();
         }
+    }
+
+    public void HideUI(bool type)
+    {
+        allUI.SetActive(!type);
+        eventUI.SetActive(type);
     }
 
     public void SetHideImage(bool value)

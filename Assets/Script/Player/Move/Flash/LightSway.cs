@@ -6,6 +6,8 @@ public class LightSway : MonoBehaviour
 {
     private GameObject M_Camera;
 
+    public Transform flashPos;
+
     [Header("FlashRotate")]
     private Vector3 offSet;
     public float speed = 3.0f;
@@ -14,8 +16,6 @@ public class LightSway : MonoBehaviour
     void Start()
     {
         M_Camera = Camera.main.gameObject;
-
-        offSet = transform.position - M_Camera.transform.position;
     }
 
     // Update is called once per frame
@@ -26,7 +26,7 @@ public class LightSway : MonoBehaviour
 
     private void Rotate()
     {
-        transform.position = M_Camera.transform.position + offSet;
+        transform.position = flashPos.position;
         transform.rotation = Quaternion.Slerp(transform.rotation, M_Camera.transform.rotation, speed * Time.deltaTime);
     }
 }

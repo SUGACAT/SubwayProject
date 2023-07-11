@@ -37,7 +37,6 @@ public class FlashSway : MonoBehaviour
             BackToOriginPos();
         }
     }
-
     private void Swaying()
     {
         float _MoveX = Input.GetAxisRaw("Mouse X");

@@ -44,10 +44,11 @@ public class CatMove : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(target != null)
-        _agent.SetDestination(target.position);
+        if (hitTargetList.Count == 0) return;
+
+        _agent.SetDestination(hitTargetList[0].transform.position);
         
-        /*if((transform.position - target.transform.position).magnitude >= 7f)
+        if((transform.position - hitTargetList[0].transform.position).magnitude >= 7f)
         {
             anim.SetBool("isWalk", true);
             _agent.speed = 1.3f;
@@ -56,7 +57,7 @@ public class CatMove : MonoBehaviour
         {
             anim.SetBool("isWalk", false);
             _agent.speed = 3.15f;
-        } */
+        }
     }
 
     private void OnDrawGizmos()

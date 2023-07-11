@@ -7,24 +7,34 @@ using Unity.VisualScripting;
 
 public class PlayerManager : MonoBehaviour
 {
+    public bool isCrouching = false;
+    public bool isRunning;
+    public bool isIdle;
+
     [Header("Scripts")]
     private PlayerController thePlayerController;
     [HideInInspector] public CharacterController theCharacterController;
     public EventManager theEventManager;
     public CanvasManager theCanvasManager;
     private MouseRotate theMouseRotate;
-    
+    private FlashLightManager theFlashLightManager;
+    private MakeSound theMakeSound;
+
     [Header("Prefabs")]
     public GameObject flash_Obj, defaultLight;
 
     public bool isHiding;
     public bool isWaiting = false;
-    
+
+    public int currentHeart;
+
     private void Awake()
     {
         thePlayerController = GetComponent<PlayerController>();
         theCharacterController = GetComponent<CharacterController>();
         theMouseRotate = GetComponent<MouseRotate>();
+        theFlashLightManager = GetComponentInChildren<FlashLightManager>();
+        theMakeSound = GetComponent<MakeSound>();
     }
 
     private void Start()
@@ -51,6 +61,11 @@ public class PlayerManager : MonoBehaviour
         defaultLight.SetActive(false);
     }
 
+    public void GetNewFlash()
+    {
+        theFlashLightManager.ChangeFlashLight();
+    }
+
     public void Hide(string type, Vector3 pos, ref bool value)
     {
         if (type == "In")
@@ -59,7 +74,8 @@ public class PlayerManager : MonoBehaviour
             theCanvasManager.SetHideImage(true);
             theCanvasManager.SetInteractObject(true);
 
-            ControlMove(false, false);
+            ControlMove(false);
+            thePlayerController.canRotate = false;
 
             value = true;
         }
@@ -69,7 +85,8 @@ public class PlayerManager : MonoBehaviour
             theCanvasManager.SetHideImage(false);
             theCanvasManager.SetInteractObject(false);
 
-            ControlMove(true, true);
+            ControlMove(true);
+            thePlayerController.canRotate = true;
 
             value = false;
         }
@@ -91,8 +108,14 @@ public class PlayerManager : MonoBehaviour
         SetRotate(true);
     }
 
+
+    public void MakeNoise() => theMakeSound.MakeNoise();
+    public void ShowKeyEvent(string codeName) => theEventManager.ShowKeyringEvent(codeName);
+    public void AddBattery() => theFlashLightManager.AddBattery();
+    public void IncreaseSpeed() => thePlayerController.IncreaseMoveSpeed();
     public float ControlStamina() => thePlayerController.ControlStamina();
-    public void ControlMove(bool move, bool rotate) { thePlayerController.canMove = move; thePlayerController.canRotate = rotate; }
+    public void AddStamina() => thePlayerController.AddStamina();
+    public void ControlMove(bool move) { thePlayerController.canMove = move;}
     public void LookFront() => transform.rotation = Quaternion.Euler(0, 90, 0);
     public void LerpRotation(Vector3 dir, float speed) => thePlayerController.LerpRotation(dir, speed);
 }
