@@ -35,7 +35,7 @@ public class Interact : MonoBehaviour
 
     public InteractableObject interactedObject;
 
-    public Lever currentLever;
+    public Levers currentLever;
 
     [Header("Check")]
     public bool canInteract = false;
@@ -83,7 +83,7 @@ public class Interact : MonoBehaviour
             }
             else if (hit.transform.CompareTag("Lever"))
             {
-                currentLever = hit.transform.gameObject.GetComponentInParent<Lever>();
+                currentLever = hit.transform.gameObject.GetComponentInParent<Levers>();
                 if (currentLever.leverOn || currentLever.isWait) return;
 
                 currentLever.canPull = true;

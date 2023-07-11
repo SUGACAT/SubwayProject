@@ -8,7 +8,7 @@ public enum Key
     Q, E
 }
 
-public class Lever : MonoBehaviour
+public class Levers : MonoBehaviour
 {
     public GameObject lever_obj;
 
