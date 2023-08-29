@@ -18,7 +18,7 @@ public class PlayerController : MonoBehaviour
     private Animator anim;
 
     private MouseRotate M_Rotate;
-    private Move theMoveController;
+    [HideInInspector] public Move theMoveController;
     private PlayerManager thePlayerManager;
     public float DecreaseStamina { get => currentStamina; set => currentStamina -= value; }
     public float IncreaseStamina { get => currentStamina; set => currentStamina += value; }
@@ -43,8 +43,12 @@ public class PlayerController : MonoBehaviour
     {
         if(canRotate == false) return;
         UpdateRotate();
-        
-        if(canMove == false) return;
+
+        if (canMove == false)
+        {
+            theMoveController.For_Forward(Vector3.zero);
+            return;
+        }
         UpdateMove();
     }
 

@@ -31,12 +31,18 @@ public class Door : MonoBehaviour
     public void Open()
     {
         Debug.Log("Door Opened");
+        
+        SoundManager.instance.PlaySE("DoorOpen");
+        anim.SetBool("isOpened", true);
         isOpened = true;
     }
 
     public void Close()
     {
         Debug.Log("Door Closed");
+        
+        SoundManager.instance.PlaySE("DoorShut");
+        anim.SetBool("isOpened", false);
         isOpened = false;
     }
 }

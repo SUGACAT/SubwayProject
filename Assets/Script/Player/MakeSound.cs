@@ -12,23 +12,28 @@ public class MakeSound : MonoBehaviour
 
     [SerializeField]
     float viewRadius = 1f;
+    Vector3 myPos;
 
     [SerializeField] LayerMask TargetMask;
     [SerializeField] LayerMask ObstacleMask;
 
     public List<Collider> hitTargetList = new List<Collider>();
 
+    PlayerManager thePlayerManager;
+
+    public float soundValue;
+
+    private void Awake()
+    {
+        thePlayerManager = GetComponent<PlayerManager>();
+    }
+
     // Update is called once per frame
     void Update()
     {
-        if (hitTargetList.Count == 0) return;
-    }
+        if (soundValue <= 0) soundValue = 0;
 
-    private void OnDrawGizmos()
-    {
-        if (!debugMode) return;
-        Vector3 myPos = transform.position + Vector3.up * 0.5f;
-        Gizmos.DrawWireSphere(myPos, viewRadius);
+        myPos = transform.position + Vector3.up * 0.5f;
 
         float lookingAngle = transform.eulerAngles.y;
 
@@ -38,20 +43,79 @@ public class MakeSound : MonoBehaviour
         Collider[] Targets = Physics.OverlapSphere(myPos, viewRadius, TargetMask);
 
         if (Targets.Length == 0) return;
+        Debug.Log("Wa");
 
         foreach (Collider EnemyColli in Targets)
         {
-            Debug.Log("AAAAAAA");
-
             Vector3 targetPos = EnemyColli.transform.position;
             Vector3 targetDir = (targetPos - myPos).normalized;
-            float targetAngle = Mathf.Acos(Vector3.Dot(lookDir, targetDir)) * Mathf.Rad2Deg;
-            if (targetAngle <= viewAngle * 0.5f && !Physics.Raycast(myPos, targetDir, viewRadius, ObstacleMask))
+            hitTargetList.Add(EnemyColli);
+            if (debugMode) Debug.DrawLine(myPos, targetPos, Color.red);
+        }
+
+        if (hitTargetList.Count == 0) return;
+
+        SpreadSound();
+    }
+
+    private void OnDrawGizmos()
+    {
+        if (!debugMode) return;
+
+        myPos = transform.position;
+
+        Gizmos.DrawWireSphere(myPos, viewRadius);
+    }
+
+    public void SpreadSoundByObject()
+    {
+        if (hitTargetList.Count != 0)
+        {
+            for (int i = 0; i < hitTargetList.Count; i++)
             {
-                hitTargetList.Add(EnemyColli);
-                if (debugMode) Debug.DrawLine(myPos, targetPos, Color.red);
+                hitTargetList[i].GetComponent<RatMove>().HearSound();
             }
         }
+    }
+
+    public void SpreadSound()
+    {
+        if (thePlayerManager.isRunning)
+        {
+            Debug.Log("A");
+
+            soundValue += Time.deltaTime;
+
+            if (soundValue >= 2f)
+            {
+                for (int i = 0; i < hitTargetList.Count; i++)
+                {
+                    hitTargetList[i].GetComponent<RatMove>().HearSound();
+                }
+            }
+        }
+        else
+        {
+            soundValue -= Time.deltaTime;
+            Debug.Log("B");
+        }
+    }
+
+    public void Footsteps1()
+    {
+        SoundManager.instance.PlaySE("Footsteps1");
+    }
+
+    public void Footsteps2()
+    {
+        int randomValue = Random.Range(1, 3);
+
+        Debug.Log(randomValue);
+        
+        if (randomValue == 1)
+            SoundManager.instance.PlaySE("Footsteps2");
+        else
+            SoundManager.instance.PlaySE("Footsteps3");
     }
 
     Vector3 AngleToDir(float angle)
@@ -64,10 +128,7 @@ public class MakeSound : MonoBehaviour
     {
         Debug.Log("NoiseStart");
 
-        for (int i = 0; i < hitTargetList.Count; i++)
-        {
-            hitTargetList[i].GetComponent<RatMove>();
-            Debug.Log("Noise");
-        }
+        var obj = GameManager.instance.theMonsterSpawner.catMonster_Obj[0].GetComponent<CatMove>();
+        obj.FindPlayerByRat();
     }
 }

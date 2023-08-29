@@ -4,22 +4,23 @@ using UnityEngine;
 
 public class GetFlashCommand : ICommand
 {
-    private FlashBox theFlashBox;
-    public GetFlashCommand(FlashBox theFlashBox)
-    {
-        this.theFlashBox = theFlashBox;
-    }
+  private FlashBox theFlashBox;
+  public GetFlashCommand(FlashBox theFlashBox)
+  {
+	this.theFlashBox = theFlashBox;
+  }
 
-    public void execute()
-    {
-        theFlashBox.GetFlash();
-    }
+  public void execute(Interact i)
+  {
+	theFlashBox.GetFlash(i);
+  }
 }
 
 public class FlashBox
 {
-    public void GetFlash()
-    {
-        Debug.Log("플래시라이트 얻음");
-    }
+  public void GetFlash(Interact i)
+  {
+	Debug.Log("플래시라이트 얻음");
+	i.Command_Flash();
+  }
 }

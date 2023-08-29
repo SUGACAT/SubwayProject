@@ -1,11 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 public interface ICommand
 {
-    public abstract void execute();
+    public abstract void execute(Interact i);
 }
 
 public class Action
@@ -17,9 +19,9 @@ public class Action
         this.theCommand = theCommand;
     }
 
-    public void operate()
+    public void operate(Interact i)
     {
-        theCommand.execute();
+        theCommand.execute(i);
     }
 }
 
@@ -34,12 +36,18 @@ public class Interact : MonoBehaviour
     private Ray ray;
 
     public InteractableObject interactedObject;
-
+    public GameObject interactedNormalObject;
+    
     public Levers currentLever;
+    public Door theDoor;
 
+    public bool isFirstTime;
+    
     [Header("Check")]
     public bool canInteract = false;
 
+    [FormerlySerializedAs("isDoor")] public bool isSingleInteraction = false;
+    
     public bool canGetFlashlight = false;
 
     [Header("Scripts")]
@@ -58,6 +66,9 @@ public class Interact : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (Input.GetKeyDown(KeyCode.K))
+            thePlayerManager.canLeverMission = true;
+
         FindObjects();
     }
 
@@ -78,11 +89,40 @@ public class Interact : MonoBehaviour
                 obj_CodeName = i_Component.codeName;
                 interactedObject = i_Component;
 
+                switch (obj_CodeName)
+                {
+                    case "FlashContainer":
+                        theCanvasManager.interactTypeText.text = "얻기";
+                        break;
+                    case "SandBox" :
+                        theCanvasManager.interactTypeText.text = "숨기";
+                        break;
+                    case "Drink":
+                        theCanvasManager.interactTypeText.text = "줍기";
+                        break;
+                    case "Chocobar":
+                        theCanvasManager.interactTypeText.text = "줍기";
+                        break;
+                    case "Battery":
+                        theCanvasManager.interactTypeText.text = "줍기";
+                        break;
+                    case "LeverKeyring":
+                        theCanvasManager.interactTypeText.text = "보기";
+                        return;
+                    case "CatKeyring":
+                        theCanvasManager.interactTypeText.text = "보기";
+                        return;
+                    case "Door":
+                        theCanvasManager.interactTypeText.text = "열기";
+                        return;
+                }
+                
                 theCanvasManager.SetInteractObject(true);
                 canInteract = true;
             }
             else if (hit.transform.CompareTag("Lever"))
             {
+                if (!thePlayerManager.canLeverMission) return;
                 currentLever = hit.transform.gameObject.GetComponentInParent<Levers>();
                 if (currentLever.leverOn || currentLever.isWait) return;
 
@@ -91,17 +131,58 @@ public class Interact : MonoBehaviour
 
                 theCanvasManager.SetLeverInteractObject(true);
                 canInteract = true;
+                isSingleInteraction = false;
             }
             else if(hit.transform.CompareTag("Door"))
             {
-                var doorComponent = hit.transform.gameObject.GetComponent<Door>();
+                theDoor = hit.transform.gameObject.GetComponentInParent<Door>();
+                
+                theCanvasManager.SetInteractObject(true);
+                theCanvasManager.interactTypeText.text = "열기";
+                obj_CodeName = "Door";
 
-                doorComponent.DivisionType();
+                canInteract = true;
+                isSingleInteraction = true;
+            }
+            else if (hit.transform.CompareTag("Key"))
+            {
+                theCanvasManager.SetInteractObject(true);
+                theCanvasManager.interactTypeText.text = "줍기";
+                isSingleInteraction = true;
+                canInteract = true;
+
+                interactedNormalObject = hit.transform.gameObject;
+                obj_CodeName = "Key";
+            }
+            else if (hit.transform.CompareTag("LockedDoor"))
+            {
+                canInteract = true;
+
+                theCanvasManager.interactTypeText.text = "열기";
+                
+                if (thePlayerManager.currentKeyCount == 1)
+                {
+                    theCanvasManager.SetInteractObject(true);
+                    isSingleInteraction = true;
+
+                    interactedNormalObject = hit.transform.gameObject;
+                    obj_CodeName = "RedDoor";
+                }
+                else if(thePlayerManager.currentKeyCount == 2) 
+                {
+                    theCanvasManager.SetInteractObject(true);
+                    isSingleInteraction = true;
+
+                    interactedNormalObject = hit.transform.gameObject;
+                    obj_CodeName = "BlueDoor";
+                }
             }
             else
             {
                 if (!thePlayerManager.isHiding)
                 {
+                    Debug.Log("B");
+
                     theCanvasManager.SetInteractObject(false);
                     theCanvasManager.SetLeverInteractObject(false);
                     theCanvasManager.ResetInteractValue();
@@ -111,6 +192,7 @@ public class Interact : MonoBehaviour
                         currentLever.ShowLeverImage(false);
                     }
                     canInteract = false;
+                    isSingleInteraction = false;
                 }
             }
         }
@@ -118,6 +200,8 @@ public class Interact : MonoBehaviour
         {
             if (!thePlayerManager.isHiding)
             {
+                Debug.Log("C");
+
                 theCanvasManager.SetInteractObject(false);
                 theCanvasManager.SetLeverInteractObject(false);
                 theCanvasManager.ResetInteractValue();
@@ -127,6 +211,7 @@ public class Interact : MonoBehaviour
                     currentLever.ShowLeverImage(false);
                 }
                 canInteract = false;
+                isSingleInteraction = false;
             }
         }
     }
@@ -134,8 +219,7 @@ public class Interact : MonoBehaviour
     public void InteractSucceed()
     {
         canInteract = false;
-
-        Debug.Log("Interact Complete");
+        isSingleInteraction = false;
 
         switch (obj_CodeName)
         {
@@ -160,22 +244,28 @@ public class Interact : MonoBehaviour
             case "CatKeyring":
                 thePlayerManager.ShowKeyEvent("CatKeyring");
                 return;
-            case "Lever":
-                break;
+            case "Door":
+                theDoor.DivisionType();
+                return;
+            case "Key":
+                interactedNormalObject.SetActive(false);
                 
+                if (thePlayerManager.currentKeyCount == 0)
+                    thePlayerManager.ActiveKeyUI(0);
+                else
+                    thePlayerManager.ActiveKeyUI(1);
+
+                thePlayerManager.currentKeyCount++;
+                
+                SoundManager.instance.PlaySE("GetSound");
+                return;
+            case "RedDoor":
+                interactedNormalObject.GetComponentInParent<Animator>().SetTrigger("Open");
+                return;
         }
+
         Action action = new Action(commandValue);
-        action.operate();
-    }
-
-    public void StartLeverInput()
-    {
-
-    }
-
-    public void EndLeverInput()
-    {
-
+        action.operate(this);
     }
 
     /// <summary>
@@ -191,12 +281,40 @@ public class Interact : MonoBehaviour
 
             commandValue = new GetSandBoxCommand(new SandBox());
             interactedObject.interacted = true;
+            
+            SoundManager.instance.PlaySE("SandBox");
+
+            if (isFirstTime)
+            {
+                GameManager.instance.theEventManager.blockCollider[0].SetActive(false);
+                GameManager.instance.theEventManager.blockCollider[1].SetActive(true);
+            }
         }
         else
         {
+            thePlayerManager.Undying();
+            
+            theCanvasManager.interactTypeText.text = "";
+
             interactedObject.SetChildObjects(true);
             thePlayerManager.Hide("Out", interactedObject.OutPos().transform.position, ref canInteract);
             interactedObject.interacted = false;
+            
+            SoundManager.instance.PlaySE("SandBox");
+
+            if(thePlayerManager.outDead) thePlayerManager.Death();
+            
+            if (isFirstTime)
+            {
+                string[] textList = new string[2];
+                textList[0] = "이게 어디서 나는 소리지...?";
+                textList[1] = "저기 빛이 나는 곳으로 가보자";
+                
+                StartCoroutine(GameManager.instance.theEventManager.PlaySEByTime(2f, "Creaking", textList));
+
+                isFirstTime = false;
+            }
+                
         }
     }
 

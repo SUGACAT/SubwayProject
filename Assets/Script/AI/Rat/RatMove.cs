@@ -14,10 +14,13 @@ public class RatMove : MonoBehaviour
     [SerializeField] GameObject targetObj;
     [SerializeField] float maxDistance;
 
+    public bool heardSound;
+
     private NavMeshAgent _agent;
     private Animator anim;
 
     public GameObject bangMark;
+    public AudioSource ratAudioSource;
 
     private void Awake()
     {
@@ -55,6 +58,28 @@ public class RatMove : MonoBehaviour
 
     public void HearSound()
     {
+        if (heardSound) return;
+
+        Debug.Log("HearSound");
         bangMark.SetActive(true);
+        heardSound = true;
+        StartCoroutine(HearSoundCoroutine());
+    }
+
+    IEnumerator HearSoundCoroutine()
+    {
+        yield return new WaitForSeconds(0.3f);
+        ratAudioSource.Play();
+
+        if(GameManager.instance.isFloor1)
+        GameManager.instance.theMonsterSpawner.catMonsterB1.GetComponent<CatMove>().FindPlayerByRat();
+        else
+            GameManager.instance.theMonsterSpawner.catMonsterB2.GetComponent<CatMove>().FindPlayerByRat();
+
+
+        yield return new WaitForSeconds(5f);
+
+        bangMark.SetActive(false);
+        heardSound = false;
     }
 }

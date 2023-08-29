@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
+using UnityEditor;
 
 public enum Events
 {
@@ -40,21 +41,26 @@ public class EventManager : MonoBehaviour
     public GameObject leverKeyObj, catKeyObj;
     public Animator showEvent;
 
+    public GameObject[] blockCollider;
+
     [Header("Prefabs")]
     public GameObject e_CatMonster, e_RatMonster;
     public GameObject deathObject;
-
-    public GameObject eventCollider;
 
     [Header("Scripts")]
     public CanvasManager theCanvasManager;
     public PlayerManager thePlayerManager;
     public MonsterSpawner theMonsterSpawner;
 
+    public int alpha = 0;
+    
     // Start is called before the first frame update
     void Start()
     {
         AwakeEvent("Start");
+
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
     }
 
     private void Update()
@@ -63,24 +69,30 @@ public class EventManager : MonoBehaviour
         {
             if (Input.GetKeyDown(KeyCode.Escape))
             {
-                thePlayerManager.theCanvasManager.HideUI(false);
-                thePlayerManager.gameObject.SetActive(true);
-                switch (currentKey)
+                if (alpha >= 1)
                 {
-                    case "Lever":
-                        leverKeyObj.gameObject.SetActive(false);
-                        break;
-                    case "Cat":
-                        catKeyObj.gameObject.SetActive(false);
-                        break;
-                }
 
-                isKeyring = false;
+                    thePlayerManager.theCanvasManager.HideUI(false);
+                    thePlayerManager.gameObject.SetActive(true);
+                    switch (currentKey)
+                    {
+                        case "Lever":
+                            leverKeyObj.gameObject.SetActive(false);
+                            break;
+                        case "Cat":
+                            catKeyObj.gameObject.SetActive(false);
+                            break;
+                    }
+
+                    isKeyring = false;
+                }
             }
         }
 
         if (keyInputCount == 1 && keyLength == 1)
         {
+            alpha++;
+            
             Debug.Log("object unlocked_1");
             keyInputCount = 0;
             keyCode1 = KeyCode.None;
@@ -127,7 +139,7 @@ public class EventManager : MonoBehaviour
         {
             theCanvasManager.FadeImageEvent();
             thePlayerManager.LookFront();
-            
+            thePlayerManager.ControlMove(false);
             //thePlayerManager.SetRotate(true); // Set Player Roataion false
         }   
     }
@@ -139,35 +151,56 @@ public class EventManager : MonoBehaviour
     
     IEnumerator FlashEventCoroutine()
     {
-        int number = GameManager.instance.eventNumber;
-        
-        thePlayerManager.ControlMove(false);
-        thePlayerManager.LerpRotation(Vector3.zero, 1f);
-
         yield return new WaitForSeconds(Event_List[0].progressDuration[0]);
-        
-        thePlayerManager.SetRotate(false);
 
         e_CatMonster.transform.position = Event_List[0].startPos[0].position;
+        SoundManager.instance.PlayBGM("Chase");
         e_CatMonster.SetActive(true);
-
-        yield return new WaitForSeconds(Event_List[0].progressDuration[1]);
-
-        thePlayerManager.ControlMove(true);
 
         yield return new WaitUntil(() =>  thePlayerManager.isHiding);
 
-        Debug.Log("NICE");
-
-        yield return new WaitForSeconds(Event_List[0].progressDuration[2]);
-
+        SoundManager.instance.StopBGM();
         e_CatMonster.SetActive(false);
-        GameManager.instance.StartMonsterSpawn(1);
-        GameManager.instance.StartMonsterSpawn(2);
 
-        theCanvasManager.ShowCheckpointUI();
+        thePlayerManager.outDead = true;
+        
+        yield return new WaitForSeconds(1f);
+        SoundManager.instance.PlaySE("MonsterFootSteps");
+        yield return new WaitForSeconds(1f);
+        SoundManager.instance.PlaySE("MonsterFootSteps");
+        yield return new WaitForSeconds(1f);
+        SoundManager.instance.PlaySE("MonsterFootSteps");
+        yield return new WaitForSeconds(2f);
+        SoundManager.instance.PlaySE("MonsterFootSteps");
+        yield return new WaitForSeconds(1.2f);
+        SoundManager.instance.PlaySE("MonsterFootSteps");
+        yield return new WaitForSeconds(1.2f);
+        SoundManager.instance.PlaySE("MonsterFootSteps");
+        yield return new WaitForSeconds(1.2f);
+        SoundManager.instance.PlaySE("MonsterFootSteps");
+        yield return new WaitForSeconds(2f);
+        SoundManager.instance.PlaySE("MonsterFootSteps");
+        yield return new WaitForSeconds(1f);
+        
+        thePlayerManager.outDead = false;
+        
+        yield return new WaitUntil(() => !thePlayerManager.isHiding);
+        
+        SoundManager.instance.PlayBGM("Wind");
+        
+        GameManager.instance.StartMonsterSpawn();
 
-        eventCollider.SetActive(false);
+        //theCanvasManager.ShowCheckpointUI();
+        blockCollider[1].SetActive(false);
+        
+        GameManager.instance.SetSubtitle("내가 방금 뭘 본 거지..?");
+        GameManager.instance.NextSubtitle("헛것을 본 건가?");
+        GameManager.instance.NextSubtitle("어서 나갈 방법을 찾아보자");
+            
+        yield return new WaitForSeconds(7f);
+        
+        theCanvasManager.ShowMissionUI("나갈 단서 찾기");
+        SoundManager.instance.PlaySE("Notification");
     }
 
     public void ShowKeyringEvent(string codeName)
@@ -212,12 +245,30 @@ public class EventManager : MonoBehaviour
 
                 showEvent.SetTrigger("ShowLever");
                 StartCoroutine(ShowEventCoroutine(14.3f));
+                thePlayerManager.canLeverMission = true;
                 break;
             case "CatKeyring":
                 thePlayerManager.gameObject.SetActive(false);
                 catKeyObj.SetActive(false);
                 break;
         }
+    }
+
+    public IEnumerator PlaySEByTime(float time, string name, string[] text)
+    {
+        yield return new WaitForSeconds(time);
+        
+        SoundManager.instance.PlaySE(name);
+
+        yield return new WaitForSeconds(3f);
+        
+        GameManager.instance.SetSubtitle(text[0]);
+        GameManager.instance.NextSubtitle(text[1]);
+
+        yield return new WaitForSeconds(3f);
+        
+        theCanvasManager.ShowMissionUI("손전등 얻기");
+        SoundManager.instance.PlaySE("Notification");
     }
 
     IEnumerator ShowEventCoroutine(float time)
@@ -244,6 +295,11 @@ public class EventManager : MonoBehaviour
         {
             deathObject.SetActive(false);
             thePlayerManager.SetRotate(false);
+
+            Cursor.lockState = CursorLockMode.None;
+            Cursor.visible = true;
+
+            GameManager.instance.theSceneManager.MoveToLobbyScene();
         }
     }
 

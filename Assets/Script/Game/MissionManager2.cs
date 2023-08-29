@@ -13,7 +13,6 @@ public class MissionManager2 : MonoBehaviour
     public void LeverMissionComplete()
     {
         currentLeverCount++;
-        SoundManager.instance.PlaySE("MissionClear");
 
         if(currentLeverCount >= 4)
         {
@@ -28,7 +27,13 @@ public class MissionManager2 : MonoBehaviour
             light_2f.SetActive(true);
 
             StartCoroutine(CCTVCoroutine());
+            
+            SoundManager.instance.PlaySE("MissionClear2");
+            return;
         }
+        else
+        
+        SoundManager.instance.PlaySE("MissionClear");
     }
 
     IEnumerator CCTVCoroutine()

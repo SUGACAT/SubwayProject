@@ -11,8 +11,12 @@ public class Attack : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
+            if(other.GetComponent<PlayerManager>().isHiding)
+            {
+                return;
+            }
             Debug.Log("Player Found");
-            other.GetComponent<PlayerManager>().Death(lookPoint.position);
+            other.GetComponent<PlayerManager>().Death();
         }
     }
 }

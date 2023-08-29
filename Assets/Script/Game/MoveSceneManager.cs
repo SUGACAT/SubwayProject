@@ -19,11 +19,16 @@ public class MoveSceneManager : MonoBehaviour
 
     public void MoveToGameScene()
     {
-        SceneManager.LoadScene("GameScene");
-    }
+        SceneManager.LoadScene("GameScene01");
+    }   
 
     public void MoveToLobbyScene()
     {
         SceneManager.LoadScene("LobbyScene");
     }
+    
+    public void MoveToCreditScene()
+    {
+        SceneManager.LoadScene("CreditScene");
+    }   
 }

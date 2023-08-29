@@ -8,7 +8,8 @@ public enum MoveState
 {
     walking,
     running,
-    crawling
+    crawling,
+    idle
 }
 
 public class Move : MonoBehaviour
@@ -23,7 +24,7 @@ public class Move : MonoBehaviour
 
     [Header("Scripts")]
     private CharacterController characterController;
-    private PlayerAnimationManager thePlayerAnimManager;
+    [HideInInspector] public PlayerAnimationManager thePlayerAnimManager;
     private PlayerController thePlayerController;
     private PlayerManager thePlayerManager;
 
@@ -56,6 +57,10 @@ public class Move : MonoBehaviour
             case MoveState.crawling:
                 thePlayerController.IncreaseStamina = Time.deltaTime * 5;
                 break;
+            case MoveState.idle:
+                thePlayerController.IncreaseStamina = Time.deltaTime * 5;
+                break;
+
         }
 
         characterController.Move(moveForce * Time.deltaTime);
@@ -68,7 +73,8 @@ public class Move : MonoBehaviour
 
             thePlayerManager.isCrouching = true;
         }
-        else if(Input.GetKeyUp(KeyCode.LeftControl)) 
+        
+        if(Input.GetKeyUp(KeyCode.LeftControl)) 
         {
             moveSpeed = 2;
             _moveState = MoveState.walking;
@@ -81,7 +87,7 @@ public class Move : MonoBehaviour
 
         ////--------------------//
 
-        if (Input.GetKeyDown(KeyCode.LeftShift))
+        if (_moveState != MoveState.idle && Input.GetKeyDown(KeyCode.LeftShift))
         {
             moveSpeed = 4;
             _moveState = MoveState.running;
@@ -92,6 +98,7 @@ public class Move : MonoBehaviour
         {
             thePlayerManager.isRunning = false;
             thePlayerAnimManager.Walk();
+            _moveState = MoveState.idle;
         }
         else if (!thePlayerManager.isRunning && !thePlayerManager.isIdle)
         {
@@ -117,6 +124,8 @@ public class Move : MonoBehaviour
         if ((direction == Vector3.zero) && !thePlayerManager.isCrouching)
         {
             thePlayerManager.isIdle = true;
+
+            _moveState = MoveState.idle;
 
             thePlayerAnimManager.Idle();
             thePlayerController.IncreaseStamina = Time.deltaTime * 5;

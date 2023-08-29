@@ -5,8 +5,9 @@ using UnityEngine;
 public class FlashLightManager : MonoBehaviour
 {
     [SerializeField] GameObject light_obj;
+    public GameObject defaultLight;
 
-    [SerializeField] float currentBattery;
+    public float currentBattery;
     [SerializeField] float maxBattery;
     [SerializeField] float addAmount;
 
@@ -34,9 +35,17 @@ public class FlashLightManager : MonoBehaviour
         if (Input.GetMouseButtonDown(0))
         {
             if (isOn)
+            {
                 SetLight(false);
+                defaultLight.SetActive(true);
+                SoundManager.instance.PlaySE("FlashOff");
+            }
             else
+            {
                 SetLight(true);
+                defaultLight.SetActive(false);
+                SoundManager.instance.PlaySE("FlashOn");
+            }
         }
 
         if (!isOn || thePlayerManager.isWaiting) return;
@@ -61,7 +70,12 @@ public class FlashLightManager : MonoBehaviour
         {
             currentBattery = 0;
             SetLight(false);
+            defaultLight.SetActive(true);
             return;
+        }
+        else
+        {
+            defaultLight.SetActive(false);
         }
 
         currentBattery -= Time.deltaTime * decreaseSpeed;

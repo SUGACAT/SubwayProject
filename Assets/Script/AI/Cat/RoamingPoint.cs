@@ -6,26 +6,42 @@ using UnityEngine;
 
 public class RoamingPoint : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+  public bool isOut;
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+  private void OnTriggerEnter(Collider other)
+  {
+	Debug.Log(other.transform.gameObject);
 
-    private void OnTriggerEnter(Collider other)
-    {
-        Debug.Log(other.transform.gameObject);
-        
-        if (other.transform.CompareTag("Monster"))
-        {
-            Debug.Log("Contact");
-            other.GetComponent<CatMove>().Roaming();
-        }
-    }
+	if (other.transform.CompareTag("Monster"))
+	{
+	  isOut = false;
+
+	  Debug.Log("Contact");
+	  CatMove theCatMove = other.GetComponent<CatMove>();
+	  theCatMove.Roaming();
+	  StartCoroutine(recallCoroutine(theCatMove));
+	}
+  }
+
+  private void OnTriggerExit(Collider other)
+  {
+	if (other.transform.CompareTag("Monster"))
+	{
+	  isOut = true;
+
+	  CatMove theCatMove = other.GetComponent<CatMove>();
+
+	  Debug.Log("Contact");
+	  theCatMove.Roaming();
+	}
+  }
+
+  IEnumerator recallCoroutine(CatMove cm)
+  {
+	yield return new WaitForSeconds(2f);
+
+	if (!isOut)
+	  cm.Roaming();
+  }
+
 }

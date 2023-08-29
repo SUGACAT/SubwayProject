@@ -144,7 +144,7 @@ public class Inventory : MonoBehaviour
                 thePlayerManager.IncreaseSpeed();
                 break;
             case Item.chocobar:
-                thePlayerManager.AddStamina();
+                thePlayerManager.AddStaminas();
                 break;
             case Item.battery:
                 thePlayerManager.AddBattery();

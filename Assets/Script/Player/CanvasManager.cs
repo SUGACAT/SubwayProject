@@ -1,10 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Reflection;
 using UnityEngine;
 using UnityEngine.UI;
 using DG.Tweening;
 using UnityEngine.Serialization;
 using TMPro;
+using Unity.VisualScripting;
 
 public class CanvasManager : MonoBehaviour
 {
@@ -26,12 +28,16 @@ public class CanvasManager : MonoBehaviour
     public Image staminaBar_Img;
     public GameObject hideSight_Obj;
     public GameObject death_Obj;
-    public GameObject allUI, eventUI, cctvUI;
+    public GameObject allUI, eventUI, cctvUI, inventoryUI;
 
+    public TextMeshProUGUI interactTypeText;
+    
     [Header("Objects")]
     public GameObject interact_Obj;
     public GameObject leverInteract_Obj;
 
+    public GameObject redKey_obj, blueKey_obj;
+    
     [Header("Scripts")]
     public EventManager theEventManager;
     public Interact theInteract;
@@ -47,6 +53,7 @@ public class CanvasManager : MonoBehaviour
     void Update()
     {
         SetInteractValue();
+        SingleInteraction();
         SetStaminaBar();
     }
 
@@ -65,11 +72,26 @@ public class CanvasManager : MonoBehaviour
 
         Destroy(background_Img);
         thePlayerManager.SetRotate(false);
+
+        inventoryUI.SetActive(true);
+
+        GameManager.instance.SetSubtitle("으 머리야...");
+        GameManager.instance.NextSubtitle("분명 엄마와 같이 있었는데.. 어디가신거지?");
+        GameManager.instance.NextSubtitle("...");
+        GameManager.instance.NextSubtitle("혼자 있으니까 너무 무서워.. 빨리 나가야겠어");
+
+        yield return new WaitForSeconds(12f);
+        
+        thePlayerManager.ControlMove(true);
+
+        yield return new WaitForSeconds(1.5f);
+        ShowMissionUI("주위를 둘러보자");
+        SoundManager.instance.PlaySE("Notification");
     }
 
     public void SetStaminaBar()
     {
-        staminaBar_Img.fillAmount = thePlayerManager.ControlStamina() / 100;
+        staminaBar_Img.fillAmount = thePlayerManager.ControlStamina() / 140;
     }
     
     public void SetInteractObject(bool value)
@@ -138,6 +160,23 @@ public class CanvasManager : MonoBehaviour
         {
             ResetInteractValue();
         }
+    }
+
+    public void SingleInteraction()
+    {
+        if(Input.GetKeyDown(KeyCode.E))
+        {
+            if (!theInteract.isSingleInteraction || !theInteract.canInteract) return;
+            theInteract.InteractSucceed();
+        }
+    }
+
+    public void ShowKeyUI(int a)
+    {
+        if (a == 0)
+            redKey_obj.SetActive(true);
+        else
+            blueKey_obj.SetActive(true);
     }
 
     public void HideUI(bool type)

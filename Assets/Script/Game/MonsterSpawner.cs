@@ -12,6 +12,9 @@ public class MonsterSpawner : MonoBehaviour
     public Transform[] ratSpawnPos_B1f;
     public Transform[] ratSpawnPos_B2f;
 
+    public GameObject catMonsterB1;
+    public GameObject catMonsterB2;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -21,27 +24,24 @@ public class MonsterSpawner : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        if (Input.GetKeyDown(KeyCode.P))
+        {
+            SpawnMonster();
+        }
     }
 
-    public void SpawnMonster(int floor)
+    public void SpawnMonster()
     {
-        switch (floor)
+        for (int i = 0; i < ratSpawnPos_B1f.Length; i++)
         {
-            case 1:
-                for (int i = 0; i < ratSpawnPos_B1f.Length; i++)
-                {
-                    Instantiate(ratMonster_Obj, ratSpawnPos_B1f[i].position, Quaternion.identity);
-                }
-                break;
-            case 2:
-                for (int i = 0; i < ratSpawnPos_B2f.Length; i++)
-                {
-                    Instantiate(ratMonster_Obj, ratSpawnPos_B2f[i].position, Quaternion.identity);
-                }
-                break;
+            Instantiate(ratMonster_Obj, ratSpawnPos_B1f[i].position, Quaternion.identity);
+        }
+        for (int i = 0; i < ratSpawnPos_B2f.Length; i++)
+        {
+            Instantiate(ratMonster_Obj, ratSpawnPos_B2f[i].position, Quaternion.identity);
         }
 
-        Instantiate(catMonster_Obj[floor - 1], catSpawnPos[floor - 1].position, Quaternion.identity);
+        catMonsterB1 = Instantiate(catMonster_Obj[0], catSpawnPos[0].position, Quaternion.identity);
+        catMonsterB2 = Instantiate(catMonster_Obj[1], catSpawnPos[1].position, Quaternion.identity);
     }
 }

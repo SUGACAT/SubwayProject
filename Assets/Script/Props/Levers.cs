@@ -17,6 +17,8 @@ public class Levers : MonoBehaviour
     public GameObject fail_obj;
     public GameObject progress_obj;
 
+    Animator anim; 
+
     public float interactValue;
 
     public int targetValue;
@@ -34,7 +36,7 @@ public class Levers : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+        anim = GetComponent<Animator>();
     }
 
     // Update is called once per frame
@@ -113,6 +115,11 @@ public class Levers : MonoBehaviour
         ShowFailImage(true);
         ShowLeverImage(false);
 
+        SoundManager.instance.PlaySE("Alarm");
+        anim.SetTrigger("Fail");
+
+        GameManager.instance.theMonsterSpawner.catMonsterB2.GetComponent<CatMove>().FindPlayerByRat();
+
         lever_obj.transform.localRotation = Quaternion.Euler(new Vector3(0f, 0f, 0f));
         StartCoroutine(ResetCoolTimeCoroutine());
     }
@@ -133,7 +140,9 @@ public class Levers : MonoBehaviour
         ShowSuccessImage(true);
 
         if (GameManager.instance.theMissionManager.leverMissionOver)
+        {
             GameManager.instance.theCanvasManager.ShowMissionUI($"Lever Complete");
+        }
         else
             GameManager.instance.theCanvasManager.ShowMissionUI($"Lever {GameManager.instance.theMissionManager.currentLeverCount} / 4");
 

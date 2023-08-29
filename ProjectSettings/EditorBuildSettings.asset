@@ -8,10 +8,16 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/LobbyScene.unity
     guid: d96036c7ca502e643bebaf8e19df875b
-  - enabled: 1
-    path: Assets/Scenes/GameScene.unity
-    guid: 9fc0d4010bbf28b4594072e72b8655ab
-  - enabled: 1
+  - enabled: 0
+    path: 
+    guid: 00000000000000000000000000000000
+  - enabled: 0
     path: Assets/Scenes/MissionScene.unity
     guid: 038cc8548ecca6c4db15dd08616fab14
+  - enabled: 1
+    path: Assets/Scenes/GameScene01.unity
+    guid: 89e565ecba5b8ac48827b324ec1ce799
+  - enabled: 1
+    path: Assets/Scenes/CreditScene.unity
+    guid: ba94ab4fca134de468c6b2eb6eb06efe
   m_configObjects: {}
